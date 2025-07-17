@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { Bot, Briefcase, ClipboardCheck, Compass, FileText, LayoutDashboard, User } from 'lucide-react';
+import { Bot, Briefcase, ClipboardCheck, Compass, LayoutDashboard, User, University, CreditCard } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -23,7 +23,7 @@ export function AppSidebar() {
     { href: '/', icon: <LayoutDashboard />, label: 'Dashboard' },
     { href: '/coach', icon: <Bot />, label: 'AI Career Coach' },
     { href: '/skills', icon: <ClipboardCheck />, label: 'Skill Assessment' },
-    { href: '/resume', icon: <FileText />, label: 'Resume Builder' },
+    { href: '/unifinder', icon: <University />, label: 'UniFinder Kenya' },
     { href: '/jobs', icon: <Briefcase />, label: 'Job Board' },
   ];
 
@@ -56,6 +56,14 @@ export function AppSidebar() {
               <Link href="/profile">
                 <User />
                 <span>Profile</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+           <SidebarMenuItem>
+            <SidebarMenuButton asChild isActive={isActive('/billing')} tooltip="Billing">
+              <Link href="/billing">
+                <CreditCard />
+                <span>Billing</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

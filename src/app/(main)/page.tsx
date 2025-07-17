@@ -2,13 +2,13 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowRight, Bot, ClipboardCheck, FileText, Briefcase } from 'lucide-react';
+import { ArrowRight, Bot, ClipboardCheck, University, Briefcase } from 'lucide-react';
 
 export default function DashboardPage() {
   const features = [
     { title: 'AI Career Coach', description: 'Get personalized career advice and guidance.', icon: <Bot className="size-8 text-primary" />, href: '/coach' },
     { title: 'Skill Assessment', description: 'Identify your strengths and areas for improvement.', icon: <ClipboardCheck className="size-8 text-primary" />, href: '/skills' },
-    { title: 'Resume Builder', description: 'Create a professional resume that stands out.', icon: <FileText className="size-8 text-primary" />, href: '/resume' },
+    { title: 'UniFinder Kenya', description: 'Find Kenyan universities that match your profile.', icon: <University className="size-8 text-primary" />, href: '/unifinder' },
     { title: 'Job Board', description: 'Find job opportunities that match your profile.', icon: <Briefcase className="size-8 text-primary" />, href: '/jobs' },
   ];
 
