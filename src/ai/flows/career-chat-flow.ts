@@ -8,7 +8,6 @@
  */
 
 import {ai} from '@/ai/genkit';
-import {generate} from 'genkit/generate';
 import {z} from 'zod';
 
 const CareerChatInputSchema = z.object({
@@ -26,15 +25,13 @@ const CareerChatOutputSchema = z.object({
 export type CareerChatOutput = z.infer<typeof CareerChatOutputSchema>;
 
 export async function careerChat(input: CareerChatInput): Promise<CareerChatOutput> {
-  const model = ai.getGenerator('googleai/gemini-2.0-flash');
 
   const history = input.history.map((msg) => ({
     role: msg.role,
     content: [{ text: msg.content }],
   }));
 
-  const response = await generate({
-    model,
+  const {text} = await ai.generate({
     history: history,
     prompt: input.message,
     system: `You are an intelligent and friendly AI assistant designed to help Kenyan high school students make informed decisions about their careers, university programs, and study resources.
@@ -66,5 +63,5 @@ Always end your answers with a helpful follow-up or encouragement like:
 “Keep exploring—you're doing great!”`,
   });
 
-  return { reply: response.text };
+  return { reply: text };
 }
