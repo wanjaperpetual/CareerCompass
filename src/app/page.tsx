@@ -39,12 +39,13 @@ export default function LandingPage() {
             </div>
              <div className="mt-12">
               <Image 
-                src="https://placehold.co/800x300.png"
-                alt="Career banner"
-                width={800}
-                height={300}
-                className="rounded-lg shadow-md mx-auto"
-                data-ai-hint="career growth"
+                src="https://placehold.co/1200x400.png"
+                alt="Students collaborating and looking at a bright future"
+                width={1200}
+                height={400}
+                className="rounded-lg shadow-xl mx-auto"
+                data-ai-hint="kenyan students future"
+                priority
               />
             </div>
           </div>
