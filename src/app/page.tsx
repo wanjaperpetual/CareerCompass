@@ -37,6 +37,16 @@ export default function LandingPage() {
                 <Link href="/sign-up">Get Started for Free</Link>
               </Button>
             </div>
+             <div className="mt-12">
+              <Image 
+                src="https://placehold.co/800x300.png"
+                alt="Career banner"
+                width={800}
+                height={300}
+                className="rounded-lg shadow-md mx-auto"
+                data-ai-hint="career growth"
+              />
+            </div>
           </div>
         </section>
 
