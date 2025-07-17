@@ -44,7 +44,7 @@ export default function LandingPage() {
                 width={1200}
                 height={400}
                 className="rounded-lg shadow-xl mx-auto"
-                data-ai-hint="kenyan students future"
+                data-ai-hint="career development"
                 priority
               />
             </div>
