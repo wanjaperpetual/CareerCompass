@@ -10,124 +10,117 @@ export type Job = {
 export const jobs: Job[] = [
   {
     id: '1',
-    title: 'Frontend Developer',
-    company: 'Innovatech',
-    location: 'San Francisco, CA',
-    type: 'Full-time',
+    title: 'Graduate Trainee - Software Engineer',
+    company: 'Safaricom PLC',
+    location: 'Nairobi, Kenya',
+    type: 'Internship',
     description: `
 **About the role:**
-We are seeking a passionate Frontend Developer to join our dynamic team. You will be responsible for building the ‘client-side’ of our web applications. You should be able to translate our company and customer needs into functional and appealing interactive applications.
+This is a fantastic opportunity for fresh graduates to kick-start their careers in technology. The Graduate Trainee program is designed to provide hands-on experience in software development, working alongside a team of experienced engineers on real-world projects that impact millions of users.
 
 **Responsibilities:**
-- Use markup languages like HTML to create user-friendly web pages
-- Maintain and improve website
-- Optimize applications for maximum speed
-- Design mobile-based features
-- Collaborate with back-end developers and web designers to improve usability
+- Write clean, maintainable, and efficient code.
+- Participate in the full software development lifecycle, including design, development, and deployment.
+- Collaborate with cross-functional teams to define, design, and ship new features.
+- Troubleshoot, debug, and upgrade existing software.
 
 **Qualifications:**
-- Proven work experience as a Frontend Developer
-- Hands on experience with markup languages
-- Experience with JavaScript, CSS and jQuery
-- Familiarity with browser testing and debugging
-- In-depth understanding of the entire web development process (design, development and deployment)
+- Bachelor's degree in Computer Science, IT, or a related field.
+- Strong understanding of data structures, algorithms, and object-oriented programming.
+- Basic knowledge of at least one programming language (e.g., Java, Python, JavaScript).
+- Excellent problem-solving and communication skills.
 `
   },
   {
     id: '2',
-    title: 'Backend Developer',
-    company: 'DataSolutions',
-    location: 'New York, NY',
-    type: 'Full-time',
+    title: 'Digital Marketing Intern',
+    company: 'Jumia Kenya',
+    location: 'Nairobi, Kenya',
+    type: 'Internship',
     description: `
 **About the role:**
-We are looking for an experienced Back-end developer to join our IT team! As a Back-end Developer, you will be responsible for the server-side web application logic as well as for the integration of the front-end part.
+Join the leading e-commerce platform in Africa and learn the ropes of digital marketing. As a Digital Marketing Intern, you will support our marketing team in developing and implementing online marketing strategies to drive brand awareness and sales.
 
 **Responsibilities:**
-- Be involved and participate in the overall application lifecycle
-- Main focus on coding and debugging
-- Collaborate with Front-end developers
-- Define and communicate technical and design requirements
-- Provide training, help and support to other team members
+- Assist in managing social media channels (Facebook, Twitter, Instagram).
+- Help create and schedule content for various digital platforms.
+- Support the planning and execution of email marketing campaigns.
+- Analyze marketing data and provide reports on campaign performance.
 
 **Qualifications:**
-- 3+ years of experience as a Back-end developer
-- In-depth understanding of web development
-- Experience with programming languages like Java, Ruby, Python, PHP and .Net
-- Familiarity with front-end languages (e.g. HTML, JavaScript and CSS)
+- Currently pursuing or recently completed a degree in Marketing, Communications, or a related field.
+- Strong written and verbal communication skills.
+- Familiarity with social media platforms and digital marketing concepts.
+- Creative, proactive, and eager to learn.
 `
   },
   {
     id: '3',
-    title: 'Product Manager',
-    company: 'Creative Minds',
-    location: 'Austin, TX',
+    title: 'Junior Accountant',
+    company: 'KCB Bank',
+    location: 'Nairobi, Kenya',
     type: 'Full-time',
     description: `
 **About the role:**
-We are looking for an experienced Product Manager to participate in the creation of new products and features, from the idea stage to launch. To be successful in this role, you should have previous experience in end-to-end project management.
+KCB Bank is seeking a detail-oriented Junior Accountant to join our finance team. You will be responsible for providing support to the finance department by managing daily accounting tasks. This is an entry-level position with opportunities for growth.
 
 **Responsibilities:**
-- Suggest product enhancements to improve user experience
-- Perform quality assurance controls on products
-- Coordinate with the engineering department to deliver functional solutions
-- Conduct research to identify customer needs and market gaps
-- Prioritize the implementation of new features and set specific timelines
+- Post and process journal entries to ensure all business transactions are recorded.
+- Update accounts receivable and issue invoices.
+- Update accounts payable and perform reconciliations.
+- Assist in the processing of balance sheets, income statements, and other financial statements.
 
 **Qualifications:**
-- Previous experience as a Product Manager or similar role
-- Experience managing the entire product lifecycle
-- Familiarity with market research, consumers’ behavior and marketing techniques
-- Hands-on experience with web technologies
-- Knowledge of project management tools, like Jira or Trello
+- Bachelor's degree in Accounting, Finance, or relevant field.
+- CPA Part II or equivalent qualification.
+- Strong attention to detail and good analytical skills.
+- Proficient in MS Excel.
 `
   },
    {
     id: '4',
-    title: 'UI/UX Designer',
-    company: 'Pixel Perfect Inc.',
-    location: 'Remote',
-    type: 'Contract',
+    title: 'Customer Service Representative',
+    company: 'Africa\'s Talking',
+    location: 'Nairobi, Kenya',
+    type: 'Full-time',
     description: `
 **About the role:**
-We're looking for a talented UI/UX Designer to create amazing user experiences. The ideal candidate should have an eye for clean and artful design, possess superior UI skills and be able to translate high-level requirements into interaction flows and artifacts, and transform them into beautiful, intuitive, and functional user interfaces.
+As a Customer Service Representative, you will be the first point of contact for our developers and business clients. You will provide assistance and support, ensuring they have a seamless experience using our APIs and platform.
 
 **Responsibilities:**
-- Collaborate with product management and engineering to define and implement innovative solutions for the product direction, visuals and experience
-- Execute all visual design stages from concept to final hand-off to engineering
-- Create wireframes, storyboards, user flows, process flows and site maps to effectively communicate interaction and design ideas
-- Conduct user research and evaluate user feedback
+- Respond to customer queries in a timely and accurate way, via phone, email, or chat.
+- Identify customer needs and help customers use specific features.
+- Analyze and report product malfunctions (e.g., by testing different scenarios or impersonating users).
+- Update our internal databases with information about technical issues and useful discussions with customers.
 
 **Qualifications:**
-- Proven UI/UX experience with a strong portfolio
-- Solid experience in creating wireframes, storyboards, user flows, process flows and site maps
-- Proficiency in Photoshop, Illustrator, OmniGraffle, or other visual design and wire-framing tools
-- Excellent visual design skills with sensitivity to user-system interaction
+- Previous experience in a customer support role is a plus.
+- Excellent communication and problem-solving skills.
+- Patience and a customer-centric attitude.
+- Technical aptitude and willingness to learn about our products.
 `
   },
   {
     id: '5',
-    title: 'Data Scientist',
-    company: 'QuantumLeap AI',
-    location: 'Boston, MA',
-    type: 'Full-time',
+    title: 'Data Science Intern',
+    company: 'M-KOPA',
+    location: 'Nairobi, Kenya',
+    type: 'Internship',
     description: `
 **About the role:**
-We are looking for a Data Scientist to analyze large amounts of raw information to find patterns that will help improve our company. We will rely on you to build data products to extract valuable business insights.
+M-KOPA is looking for a driven Data Science Intern to join our data team. You'll have the opportunity to work on projects that leverage data to make better business decisions, from customer analytics to credit scoring models.
 
 **Responsibilities:**
-- Identify valuable data sources and automate collection processes
-- Undertake preprocessing of structured and unstructured data
-- Analyze large amounts of information to discover trends and patterns
-- Build predictive models and machine-learning algorithms
-- Present information using data visualization techniques
+- Assist in collecting, cleaning, and processing large datasets.
+- Perform exploratory data analysis to identify trends and patterns.
+- Support the development and validation of machine learning models.
+- Create data visualizations and communicate findings to stakeholders.
 
 **Qualifications:**
-- Proven experience as a Data Scientist or Data Analyst
-- Experience in data mining
-- Understanding of machine-learning and operations research
-- Knowledge of R, SQL and Python; familiarity with Scala, Java or C++ is an asset
-- Experience using business intelligence tools (e.g. Tableau) and data frameworks (e.g. Hadoop)
+- Currently pursuing a degree in Data Science, Statistics, Computer Science, or a related quantitative field.
+- Proficiency in Python and SQL.
+- Familiarity with data science libraries (e.g., Pandas, Scikit-learn).
+- Strong analytical and quantitative skills.
 `
   }
 ];
