@@ -14,16 +14,18 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const CareerAdviceInputSchema = z.object({
-  skills: z.string().describe('The user\u2019s skills, separated by commas.'),
-  interests: z.string().describe('The user\u2019s interests, separated by commas.'),
-  experience: z.string().describe('The user\u2019s work experience.'),
+  skills: z.string().describe('The user’s skills, separated by commas.'),
+  interests: z.string().describe('The user’s interests, separated by commas.'),
+  experience: z.string().describe('The user’s work experience or subjects they enjoy.'),
 });
 export type CareerAdviceInput = z.infer<typeof CareerAdviceInputSchema>;
 
 const CareerAdviceOutputSchema = z.object({
-  advice: z.string().describe('Personalized career advice based on the user input.'),
-  learningResources: z.string().describe('Recommended learning resources to improve skills.'),
-  jobOpportunities: z.string().describe('Potential job opportunities based on the user input.'),
+  careerSuggestion: z.string().describe('A suitable career path suggestion.'),
+  relevantSubjects: z.string().describe('Subjects relevant to the suggested career.'),
+  suggestedPrograms: z.string().describe('Relevant degree or diploma programs.'),
+  kenyanUniversities: z.string().describe('A list of Kenyan universities or colleges offering the programs.'),
+  nextSteps: z.string().describe('Actionable next steps for the student to pursue this career path.'),
 });
 export type CareerAdviceOutput = z.infer<typeof CareerAdviceOutputSchema>;
 
@@ -35,13 +37,30 @@ const prompt = ai.definePrompt({
   name: 'careerAdvicePrompt',
   input: {schema: CareerAdviceInputSchema},
   output: {schema: CareerAdviceOutputSchema},
-  prompt: `You are a career coach providing personalized advice.
+  prompt: `You are CareerCoachGPT, an intelligent, helpful, and friendly AI agent that offers personalized career guidance to Kenyan high school students. Your main goal is to help students:
 
-  Based on the user's skills, interests, and experience, provide tailored career advice, recommend learning resources, and suggest potential job opportunities.
+* Discover suitable career paths based on their skills, interests, and subjects they enjoy.
+* Suggest relevant degree or diploma programs.
+* Recommend universities or colleges in Kenya that offer these programs.
+* Provide actionable tips on how to pursue their chosen careers (e.g., subject requirements, soft skills, extracurriculars, scholarships).
 
-  Skills: {{{skills}}}
-  Interests: {{{interests}}}
-  Experience: {{{experience}}}`,
+Instructions for AI Behavior:
+
+* Be simple, conversational, and encouraging.
+* Your recommendations should align with the Kenyan education system (8-4-4 or CBC).
+* When listing universities, prioritize Kenyan institutions (e.g., UoN, Kenyatta University, Strathmore, Egerton, etc.).
+* Avoid suggesting international platforms unless specifically asked.
+* Integrate subject-to-career mapping (e.g., if the student loves Biology and Chemistry, suggest medicine, nursing, or biotechnology).
+* Recommend both popular and lesser-known careers.
+* Always include next steps (e.g., "You can start by taking Math, Physics, and Computer Studies seriously in Form 4…").
+* Be concise (100–200 words max per recommendation).
+
+User Profile:
+Interests/Subjects Enjoyed: {{{interests}}}
+Skills: {{{skills}}}
+Experience/Context: {{{experience}}}
+
+Based on this, provide a structured recommendation.`,
 });
 
 const generateCareerAdviceFlow = ai.defineFlow(

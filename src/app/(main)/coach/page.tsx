@@ -4,7 +4,7 @@ import { useProfile } from '@/contexts/ProfileContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { generateCareerAdvice, type CareerAdviceOutput } from '@/ai/flows/generate-career-advice';
-import { Loader2, Lightbulb, BookOpen, Briefcase, Sparkles } from 'lucide-react';
+import { Loader2, Lightbulb, BookOpen, Briefcase, Sparkles, University, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -39,7 +39,7 @@ export default function CoachPage() {
   const renderResult = () => {
     if (isLoading) {
       return (
-        <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3 mt-8">
+        <div className="grid gap-6 mt-8">
           <Card><CardHeader><Skeleton className="h-6 w-1/2" /></CardHeader><CardContent><Skeleton className="h-20 w-full" /></CardContent></Card>
           <Card><CardHeader><Skeleton className="h-6 w-1/2" /></CardHeader><CardContent><Skeleton className="h-20 w-full" /></CardContent></Card>
           <Card><CardHeader><Skeleton className="h-6 w-1/2" /></CardHeader><CardContent><Skeleton className="h-20 w-full" /></CardContent></Card>
@@ -50,33 +50,58 @@ export default function CoachPage() {
     if (!result) return null;
 
     return (
-      <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3 mt-8 animate-in fade-in-50">
+      <div className="mt-8 space-y-6 animate-in fade-in-50">
         <Card>
-          <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-            <Lightbulb className="size-8 text-accent" />
-            <CardTitle className="font-headline">Career Advice</CardTitle>
+          <CardHeader>
+            <CardTitle className="font-headline flex items-center gap-4">
+              <Lightbulb className="size-8 text-accent" />
+              Career Suggestion: {result.careerSuggestion}
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground whitespace-pre-wrap">{result.advice}</p>
-          </CardContent>
         </Card>
+        
+        <div className="grid gap-6 md:grid-cols-2">
+            <Card>
+                <CardHeader>
+                    <CardTitle className="font-headline text-lg flex items-center gap-2">
+                        <BookOpen className="size-6 text-accent" />
+                        Academics
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div>
+                        <h4 className="font-semibold">Relevant Subjects</h4>
+                        <p className="text-muted-foreground">{result.relevantSubjects}</p>
+                    </div>
+                    <div>
+                        <h4 className="font-semibold">Suggested Programs</h4>
+                        <p className="text-muted-foreground">{result.suggestedPrograms}</p>
+                    </div>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="font-headline text-lg flex items-center gap-2">
+                        <University className="size-6 text-accent" />
+                        Kenyan Universities
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">{result.kenyanUniversities}</p>
+                </CardContent>
+            </Card>
+        </div>
+
         <Card>
-          <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-            <BookOpen className="size-8 text-accent" />
-            <CardTitle className="font-headline">Learning Resources</CardTitle>
-          </CardHeader>
-          <CardContent>
-             <p className="text-muted-foreground whitespace-pre-wrap">{result.learningResources}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-            <Briefcase className="size-8 text-accent" />
-            <CardTitle className="font-headline">Job Opportunities</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground whitespace-pre-wrap">{result.jobOpportunities}</p>
-          </CardContent>
+            <CardHeader>
+                <CardTitle className="font-headline text-lg flex items-center gap-2">
+                    <CheckCircle className="size-6 text-accent" />
+                    Next Steps
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p className="text-muted-foreground whitespace-pre-wrap">{result.nextSteps}</p>
+            </CardContent>
         </Card>
       </div>
     );
