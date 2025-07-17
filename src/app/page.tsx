@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Compass, Bot, Briefcase, University, Check, GraduationCap, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function LandingPage() {
   return (
@@ -36,17 +35,6 @@ export default function LandingPage() {
               <Button size="lg" asChild>
                 <Link href="/sign-up">Get Started for Free</Link>
               </Button>
-            </div>
-             <div className="mt-12">
-              <Image 
-                src="https://placehold.co/1200x400.png"
-                alt="Students collaborating and looking at a bright future"
-                width={1200}
-                height={400}
-                className="rounded-lg shadow-xl mx-auto"
-                data-ai-hint="career development"
-                priority
-              />
             </div>
           </div>
         </section>
@@ -84,18 +72,15 @@ export default function LandingPage() {
                 </CardContent>
               </Card>
             </div>
-             <div className="relative mt-16 flex flex-col md:flex-row items-center justify-between rounded-lg border bg-card p-8 shadow-lg">
-                <div className="md:w-1/2">
+             <div className="relative mt-16 flex flex-col items-center justify-center rounded-lg border bg-card p-8 shadow-lg text-center">
+                <div className="max-w-xl">
                     <h3 className="text-2xl font-bold font-headline">See How You Match</h3>
                     <p className="text-muted-foreground mt-2">Our AI analyzes your profile against job descriptions to give you a suitability score, helping you apply with confidence.</p>
-                    <ul className="mt-4 space-y-2 text-muted-foreground">
+                    <ul className="mt-4 space-y-2 text-muted-foreground inline-block text-left">
                       <li className="flex items-center gap-2"><Check className="text-primary size-5" /> Score jobs from 0-100%</li>
                       <li className="flex items-center gap-2"><Check className="text-primary size-5" /> Get justifications for your score</li>
                       <li className="flex items-center gap-2"><Check className="text-primary size-5" /> Identify skill gaps to improve</li>
                     </ul>
-                </div>
-                <div className="md:w-1/2 mt-8 md:mt-0 flex justify-center">
-                    <Image src="https://placehold.co/400x300.png" alt="Feature screenshot" width={400} height={300} className="rounded-lg shadow-md" data-ai-hint="dashboard analysis"/>
                 </div>
             </div>
           </div>
