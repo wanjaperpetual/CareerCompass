@@ -1,12 +1,27 @@
 'use client';
 import { useState } from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useProfile } from '@/contexts/ProfileContext';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { generateCareerAdvice, type CareerAdviceOutput } from '@/ai/flows/generate-career-advice';
-import { Loader2, Lightbulb, BookOpen, Briefcase, Sparkles, University, CheckCircle } from 'lucide-react';
+import { Loader2, Lightbulb, BookOpen, Sparkles, University, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
+
+const formSchema = z.object({
+  skills: z.string().min(3, 'Please list at least one skill.'),
+  interests: z.string().min(3, 'Please list at least one interest.'),
+  experience: z.string().min(10, 'Please describe your experience or subjects.'),
+});
+
+type FormValues = z.infer<typeof formSchema>;
+
 
 export default function CoachPage() {
   const { profile, isProfileLoading } = useProfile();
@@ -14,15 +29,20 @@ export default function CoachPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const getAdvice = async () => {
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      skills: profile.skills,
+      interests: 'Software Development, AI, Problem Solving',
+      experience: profile.experience.map(e => `${e.title} at ${e.company}`).join(', ') || profile.summary,
+    },
+  });
+
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setIsLoading(true);
     setResult(null);
     try {
-      const adviceResult = await generateCareerAdvice({
-        skills: profile.skills,
-        interests: 'Software Development, AI, Problem Solving', // Example interests
-        experience: profile.experience.map(e => `${e.title} at ${e.company}: ${e.description}`).join('\n'),
-      });
+      const adviceResult = await generateCareerAdvice(data);
       setResult(adviceResult);
     } catch (error) {
       console.error("Failed to generate career advice:", error);
@@ -36,8 +56,9 @@ export default function CoachPage() {
     }
   };
 
+
   const renderResult = () => {
-    if (isLoading) {
+    if (isLoading && !result) {
       return (
         <div className="grid gap-6 mt-8">
           <Card><CardHeader><Skeleton className="h-6 w-1/2" /></CardHeader><CardContent><Skeleton className="h-20 w-full" /></CardContent></Card>
@@ -116,28 +137,71 @@ export default function CoachPage() {
         </p>
       </header>
 
-      <Card className="max-w-4xl mx-auto text-center">
-        <CardHeader>
-          <CardTitle className="font-headline text-2xl">Ready to find your path?</CardTitle>
-          <CardDescription>
-            Click the button below to generate your personalized career report.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button size="lg" onClick={getAdvice} disabled={isLoading || isProfileLoading}>
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Generating...
-              </>
-            ) : (
-              <>
-                <Sparkles className="mr-2 h-4 w-4" />
-                Generate My Career Advice
-              </>
-            )}
-          </Button>
-        </CardContent>
+      <Card className="max-w-4xl mx-auto">
+         <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <CardHeader>
+                <CardTitle className="font-headline">Find Your Path</CardTitle>
+                <CardDescription>Fill in your details to generate personalized career advice.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                 <FormField
+                  control={form.control}
+                  name="skills"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Your Skills</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., Problem Solving, Mathematics, Communication" {...field} />
+                      </FormControl>
+                       <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="interests"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Your Interests & Favorite Subjects</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., Computers, Biology, Art" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="experience"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Experience / Context</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Describe any work experience or subjects you enjoy and excel at." {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+              <CardFooter>
+                 <Button size="lg" type="submit" disabled={isLoading || isProfileLoading}>
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="mr-2 h-4 w-4" />
+                        Generate My Career Advice
+                      </>
+                    )}
+                  </Button>
+              </CardFooter>
+            </form>
+          </Form>
       </Card>
       
       {renderResult()}
