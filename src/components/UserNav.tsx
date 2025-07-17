@@ -21,7 +21,7 @@ export function UserNav() {
 
   const handleSignOut = () => {
     // In a real app, you'd call an API to sign out.
-    router.push('/sign-in');
+    router.push('/');
   };
   
   return (
