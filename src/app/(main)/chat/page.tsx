@@ -32,17 +32,19 @@ export default function ChatPage() {
     if (!input.trim()) return;
 
     const userMessage: Message = { role: 'user', content: input };
-    setMessages(prev => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
+    const currentInput = input;
     setInput('');
     setIsLoading(true);
 
     try {
-      const chatHistory = messages.map(m => ({
+      const chatHistory = messages.map(m => ({ // History before the new message
           role: m.role,
           content: m.content
       }));
       
-      const result = await careerChat({ history: chatHistory, message: input });
+      const result = await careerChat({ history: chatHistory, message: currentInput });
       const botMessage: Message = { role: 'model', content: result.reply };
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
@@ -52,7 +54,8 @@ export default function ChatPage() {
         title: 'Error',
         description: 'Failed to get a response from the assistant. Please try again.',
       });
-       setMessages(prev => prev.slice(0, -1)); // Remove the user message on error
+       // Revert to messages before the user's latest message on error
+       setMessages(messages);
     } finally {
       setIsLoading(false);
     }
