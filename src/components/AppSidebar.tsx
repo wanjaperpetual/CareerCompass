@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { Bot, Briefcase, ClipboardCheck, Compass, LayoutDashboard, User, University, CreditCard } from 'lucide-react';
+import { Bot, Briefcase, ClipboardCheck, Compass, LayoutDashboard, User, University, CreditCard, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -21,6 +21,7 @@ export function AppSidebar() {
 
   const menuItems = [
     { href: '/', icon: <LayoutDashboard />, label: 'Dashboard' },
+    { href: '/chat', icon: <MessageCircle />, label: 'Chatbot' },
     { href: '/coach', icon: <Bot />, label: 'AI Career Coach' },
     { href: '/skills', icon: <ClipboardCheck />, label: 'Skill Assessment' },
     { href: '/unifinder', icon: <University />, label: 'UniFinder Kenya' },

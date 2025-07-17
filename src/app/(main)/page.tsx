@@ -2,10 +2,11 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowRight, Bot, ClipboardCheck, University, Briefcase } from 'lucide-react';
+import { ArrowRight, Bot, ClipboardCheck, University, Briefcase, MessageCircle } from 'lucide-react';
 
 export default function DashboardPage() {
   const features = [
+    { title: 'AI Chatbot', description: 'Get instant answers about careers and universities.', icon: <MessageCircle className="size-8 text-primary" />, href: '/chat' },
     { title: 'AI Career Coach', description: 'Get personalized career advice and guidance.', icon: <Bot className="size-8 text-primary" />, href: '/coach' },
     { title: 'Skill Assessment', description: 'Identify your strengths and areas for improvement.', icon: <ClipboardCheck className="size-8 text-primary" />, href: '/skills' },
     { title: 'UniFinder Kenya', description: 'Find Kenyan universities that match your profile.', icon: <University className="size-8 text-primary" />, href: '/unifinder' },
@@ -23,7 +24,7 @@ export default function DashboardPage() {
         </p>
       </header>
       
-      <main className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
+      <main className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {features.map((feature, index) => (
           <Card key={feature.title} className="flex flex-col transition-all hover:shadow-md hover:-translate-y-1" style={{ animationDelay: `${index * 100}ms` }}>
             <CardHeader>
