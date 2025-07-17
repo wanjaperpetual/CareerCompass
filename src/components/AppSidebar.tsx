@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { Bot, Briefcase, ClipboardCheck, Compass, LayoutDashboard, User, University, CreditCard, MessageCircle } from 'lucide-react';
+import { Bot, Briefcase, ClipboardCheck, Compass, LayoutDashboard, User, University, CreditCard, MessageCircle, History } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -52,6 +52,14 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild isActive={isActive('/history')} tooltip="History">
+              <Link href="/history">
+                <History />
+                <span>History</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild isActive={isActive('/profile')} tooltip="Profile">
               <Link href="/profile">
