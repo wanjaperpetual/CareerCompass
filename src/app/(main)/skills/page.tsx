@@ -8,13 +8,13 @@ import { useProfile } from '@/contexts/ProfileContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { generateSkillImprovementPlan } from '@/ai/flows/generate-skill-improvement-plan';
 import { Loader2, Sparkles, Wand2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useHistory } from '@/contexts/HistoryContext';
 
 const formSchema = z.object({
   skills: z.string().min(3, 'Please list at least one skill.'),
@@ -29,6 +29,7 @@ export default function SkillsPage() {
   const [plan, setPlan] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { addToHistory } = useHistory();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -45,6 +46,7 @@ export default function SkillsPage() {
     try {
       const result = await generateSkillImprovementPlan(data);
       setPlan(result.plan);
+      addToHistory({ tool: 'Skills', input: data, output: result });
     } catch (error) {
       console.error('Failed to generate skill plan:', error);
       toast({

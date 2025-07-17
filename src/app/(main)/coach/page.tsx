@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useHistory } from '@/contexts/HistoryContext';
 
 const formSchema = z.object({
   skills: z.string().min(3, 'Please list at least one skill.'),
@@ -28,6 +29,7 @@ export default function CoachPage() {
   const [result, setResult] = useState<CareerAdviceOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { addToHistory } = useHistory();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -44,6 +46,7 @@ export default function CoachPage() {
     try {
       const adviceResult = await generateCareerAdvice(data);
       setResult(adviceResult);
+      addToHistory({ tool: 'Coach', input: data, output: adviceResult });
     } catch (error) {
       console.error("Failed to generate career advice:", error);
       toast({

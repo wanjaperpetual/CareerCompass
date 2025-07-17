@@ -11,6 +11,7 @@ import { findUniversities, type FindUniversitiesOutput } from '@/ai/flows/find-u
 import { Loader2, Search, Link as LinkIcon, GraduationCap } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useHistory } from '@/contexts/HistoryContext';
 
 const formSchema = z.object({
   course: z.string().min(3, 'Please enter a course.'),
@@ -24,6 +25,7 @@ export default function UniFinderPage() {
   const [result, setResult] = useState<FindUniversitiesOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { addToHistory } = useHistory();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -40,6 +42,7 @@ export default function UniFinderPage() {
     try {
       const universitiesResult = await findUniversities(data);
       setResult(universitiesResult);
+      addToHistory({ tool: 'UniFinder', input: data, output: universitiesResult });
     } catch (error) {
       console.error("Failed to find universities:", error);
       toast({

@@ -13,12 +13,14 @@ import { useProfile } from '@/contexts/ProfileContext';
 import { Loader2, MapPin, Search, Sparkles } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
+import { useHistory } from '@/contexts/HistoryContext';
 
 function SuitabilityAnalysis({ job }: { job: Job }) {
   const { profile } = useProfile();
   const [analysis, setAnalysis] = useState<JobSuitabilityOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { addToHistory } = useHistory();
 
   const handleAnalyze = async () => {
     setIsLoading(true);
@@ -29,6 +31,11 @@ function SuitabilityAnalysis({ job }: { job: Job }) {
         jobDescription: job.description,
       });
       setAnalysis(result);
+      addToHistory({
+        tool: 'Job Analysis',
+        input: { jobTitle: job.title, company: job.company },
+        output: result,
+      });
     } catch (error) {
       console.error('Failed to analyze job suitability:', error);
       toast({
