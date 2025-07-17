@@ -25,10 +25,9 @@ const CareerChatOutputSchema = z.object({
 export type CareerChatOutput = z.infer<typeof CareerChatOutputSchema>;
 
 export async function careerChat(input: CareerChatInput): Promise<CareerChatOutput> {
-
   const history = input.history.map((msg) => ({
     role: msg.role,
-    content: [{ text: msg.content }],
+    content: [{text: msg.content}],
   }));
 
   const {text} = await ai.generate({
@@ -63,5 +62,5 @@ Always end your answers with a helpful follow-up or encouragement like:
 “Keep exploring—you're doing great!”`,
   });
 
-  return { reply: text };
+  return {reply: text};
 }
