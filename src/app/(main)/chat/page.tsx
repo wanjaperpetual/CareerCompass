@@ -39,12 +39,13 @@ export default function ChatPage() {
     setIsLoading(true);
 
     try {
-      const chatHistory = messages.map(m => ({ // History before the new message
+      // The history should include the new user message for the AI to have context.
+      const chatHistoryForAPI = newMessages.slice(0, -1).map(m => ({
           role: m.role,
           content: m.content
       }));
       
-      const result = await careerChat({ history: chatHistory, message: currentInput });
+      const result = await careerChat({ history: chatHistoryForAPI, message: currentInput });
       const botMessage: Message = { role: 'model', content: result.reply };
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
@@ -54,7 +55,7 @@ export default function ChatPage() {
         title: 'Error',
         description: 'Failed to get a response from the assistant. Please try again.',
       });
-       // Revert to messages before the user's latest message on error
+       // On error, remove the user message that failed.
        setMessages(messages);
     } finally {
       setIsLoading(false);
