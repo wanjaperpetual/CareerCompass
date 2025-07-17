@@ -9,14 +9,14 @@ import { Button } from '@/components/ui/button';
 import { Compass, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
-export default function SignUpPage() {
+export default function SignInPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
+    // Simulate API call for sign-in
     setTimeout(() => {
       router.push('/dashboard');
     }, 1500);
@@ -30,9 +30,9 @@ export default function SignUpPage() {
              <Compass className="size-8 text-primary" />
              <h1 className="text-2xl font-bold font-headline text-foreground">CareerCompass</h1>
            </div>
-          <CardTitle className="text-2xl font-headline">Create an Account</CardTitle>
+          <CardTitle className="text-2xl font-headline">Sign In</CardTitle>
           <CardDescription>
-            Start your journey with us today.
+            Welcome back! Please enter your details.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -45,20 +45,16 @@ export default function SignUpPage() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" required />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm Password</Label>
-              <Input id="confirm-password" type="password" required />
-            </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign Up
+              Sign In
             </Button>
             <p className="text-xs text-muted-foreground">
-              Already have an account?{' '}
-              <Link href="/sign-in" className="font-semibold text-primary hover:underline">
-                Sign In
+              Don't have an account?{' '}
+              <Link href="/sign-up" className="font-semibold text-primary hover:underline">
+                Sign Up
               </Link>
             </p>
           </CardFooter>
