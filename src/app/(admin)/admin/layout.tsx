@@ -9,6 +9,9 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
+  // In a real application, you would implement proper authentication logic here.
+  // This would involve checking for a valid session and verifying if the user
+  // has the 'admin' role in your database.
   const isAdmin = true; // Replace with actual auth check for admin role
 
   if (!isAdmin) {

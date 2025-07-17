@@ -15,8 +15,9 @@ export default function AdminSignInPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call for sign-in
+    // Simulate API call for admin sign-in
     setTimeout(() => {
+      // In a real app, you would set an admin session cookie here
       router.push('/admin/dashboard');
     }, 1500);
   };
@@ -29,9 +30,9 @@ export default function AdminSignInPage() {
              <Shield className="size-8 text-primary" />
              <h1 className="text-2xl font-bold font-headline text-foreground">Admin Portal</h1>
            </div>
-          <CardTitle className="text-2xl font-headline">Sign In</CardTitle>
+          <CardTitle className="text-2xl font-headline">Administrator Sign In</CardTitle>
           <CardDescription>
-            Please enter your administrator credentials.
+            Please enter your administrator credentials to access the dashboard.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
