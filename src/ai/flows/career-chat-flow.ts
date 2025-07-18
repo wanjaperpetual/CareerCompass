@@ -32,8 +32,10 @@ export async function careerChat(input: CareerChatInput): Promise<CareerChatOutp
 
   const {text} = await ai.generate({
     model: 'googleai/gemini-2.0-flash',
-    history: history,
-    prompt: input.message,
+    history: [
+      ...history,
+      { role: 'user', content: [{ text: input.message }] },
+    ],
     system: `You are an intelligent and friendly AI assistant designed to help Kenyan high school students make informed decisions about their careers, university programs, and study resources.
 
 Your main role is to guide users by answering questions about:
