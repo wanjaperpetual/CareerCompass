@@ -53,6 +53,9 @@ export function UserNav() {
            <DropdownMenuItem asChild>
             <Link href="/settings/change-password">Change Password</Link>
           </DropdownMenuItem>
+           <DropdownMenuItem asChild>
+            <Link href="/admin/dashboard">Switch to Admin View</Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>
