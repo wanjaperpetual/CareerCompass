@@ -3,9 +3,9 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Bot, Briefcase, Users, FileText, ArrowUp, ArrowDown, GraduationCap, ClipboardCheck } from 'lucide-react';
+import { Bot, Briefcase, Users, FileText, ArrowUp, ArrowDown, GraduationCap, ClipboardCheck, Book, Building2 } from 'lucide-react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart";
-import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip as RechartsTooltip } from 'recharts';
+import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip as RechartsTooltip, Line, LineChart } from 'recharts';
 import { Button } from '@/components/ui/button';
 
 const recentActivity = [
@@ -23,6 +23,16 @@ const toolUsageData = [
     { tool: 'UniFinder', queries: 90, fill: "var(--color-unifinder)" },
     { tool: 'Skills', queries: 75, fill: "var(--color-skills)" },
     { tool: 'Chat', queries: 138, fill: "var(--color-chat)" },
+];
+
+const dailyActiveUsersData = [
+  { date: 'Mon', users: 120 },
+  { date: 'Tue', users: 150 },
+  { date: 'Wed', users: 170 },
+  { date: 'Thu', users: 130 },
+  { date: 'Fri', users: 190 },
+  { date: 'Sat', users: 210 },
+  { date: 'Sun', users: 180 },
 ];
 
 const chartConfig = {
@@ -49,6 +59,10 @@ const chartConfig = {
     label: "Chat",
     color: "hsl(var(--chart-5))",
   },
+  users: {
+    label: "Users",
+    color: "hsl(var(--chart-2))",
+  },
 } satisfies ChartConfig;
 
 
@@ -61,10 +75,13 @@ export default function AdminDashboardPage() {
             Admin Dashboard
             </h1>
             <p className="text-lg text-muted-foreground">
-            Overview of system usage and user engagement.
+            Global view of system analytics, user engagement, and content.
             </p>
         </div>
-        <Button variant="outline">Export Data</Button>
+        <div className="flex gap-2">
+            <Button variant="outline">Export User Data</Button>
+            <Button variant="outline">Export Reports</Button>
+        </div>
       </header>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -96,31 +113,31 @@ export default function AdminDashboardPage() {
         </Card>
         <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Career Advice Generated</CardTitle>
+            <CardTitle className="text-sm font-medium">Flagged Content</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">342</div>
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-                <ArrowUp className="h-3 w-3 text-green-500"/>
-                <span>+15% from last week</span>
+            <div className="text-2xl font-bold">12</div>
+            <p className="text-xs text-muted-foreground">
+                Awaiting review
             </p>
           </CardContent>
         </Card>
          <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">University Searches</CardTitle>
-            <GraduationCap className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Content Stats</CardTitle>
+            <ClipboardCheck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">1,890</div>
-            <p className="text-xs text-muted-foreground">Total searches all time</p>
+          <CardContent className="text-xs text-muted-foreground">
+             <div className="flex items-center gap-2"><Building2 className="h-3 w-3" /> 45 Universities</div>
+             <div className="flex items-center gap-2"><GraduationCap className="h-3 w-3" /> 210 Programs</div>
+             <div className="flex items-center gap-2"><Briefcase className="h-3 w-3" /> 88 Job Listings</div>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-5">
-        <Card className="md:col-span-3 bg-card/50 backdrop-blur-sm">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+        <Card className="lg:col-span-3 bg-card/50 backdrop-blur-sm">
             <CardHeader>
                 <CardTitle>AI Tool Usage</CardTitle>
                 <CardDescription>Breakdown of queries by feature for the last 7 days.</CardDescription>
@@ -136,10 +153,27 @@ export default function AdminDashboardPage() {
                 </ChartContainer>
             </CardContent>
         </Card>
-        <Card className="md:col-span-2 bg-card/50 backdrop-blur-sm">
+         <Card className="lg:col-span-2 bg-card/50 backdrop-blur-sm">
+            <CardHeader>
+                <CardTitle>Daily Active Users</CardTitle>
+                <CardDescription>DAU for the last 7 days.</CardDescription>
+            </CardHeader>
+            <CardContent className="h-[250px]">
+                 <ChartContainer config={chartConfig} className="w-full h-full">
+                    <LineChart data={dailyActiveUsersData} margin={{ top: 20, right: 20, left: -10, bottom: 0 }}>
+                        <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} />
+                        <YAxis tickLine={false} axisLine={false} tickMargin={8} />
+                        <RechartsTooltip cursor={true} content={<ChartTooltipContent indicator="dot" />} />
+                        <Line type="monotone" dataKey="users" stroke="var(--color-users)" strokeWidth={2} dot={false} />
+                    </LineChart>
+                </ChartContainer>
+            </CardContent>
+        </Card>
+      </div>
+       <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle>Recent AI Activity</CardTitle>
-            <CardDescription>A log of recent user interactions.</CardDescription>
+            <CardTitle>Recent AI Activity Logs</CardTitle>
+            <CardDescription>A log of recent user interactions with AI agents.</CardDescription>
           </CardHeader>
           <CardContent className="h-[250px] overflow-auto">
             <Table>
@@ -147,7 +181,7 @@ export default function AdminDashboardPage() {
                 {recentActivity.map((activity) => (
                     <TableRow key={activity.id} className="border-b-white/5">
                     <TableCell className="font-medium p-2">{activity.user}</TableCell>
-                    <TableCell className="text-muted-foreground p-2">{activity.action.length > 25 ? `${activity.action.substring(0, 25)}...` : activity.action}</TableCell>
+                    <TableCell className="text-muted-foreground p-2">{activity.action}</TableCell>
                     <TableCell className="p-2">
                         <Badge variant="secondary">{activity.tool}</Badge>
                     </TableCell>
@@ -157,9 +191,6 @@ export default function AdminDashboardPage() {
             </Table>
           </CardContent>
         </Card>
-      </div>
     </div>
   );
 }
-
-    

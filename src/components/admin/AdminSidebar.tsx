@@ -8,19 +8,22 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { Shield, LayoutDashboard, Users, Settings, LogOut, Briefcase } from 'lucide-react';
+import { Shield, LayoutDashboard, Users, Settings, LogOut, Briefcase, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export function AppSidebar() {
   const pathname = usePathname();
   const isActive = (path: string) => {
+    // Exact match for dashboard
+    if (path === '/admin/dashboard') return pathname === path;
     return pathname.startsWith(path);
   }
 
   const menuItems = [
     { href: '/admin/dashboard', icon: <LayoutDashboard />, label: 'Dashboard' },
-    { href: '/admin/users', icon: <Users />, label: 'Users' },
+    { href: '/admin/users', icon: <Users />, label: 'User Management' },
+    { href: '/admin/content', icon: <FileText />, label: 'Content Management' },
   ];
 
   return (
@@ -47,6 +50,14 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem>
+             <SidebarMenuButton asChild isActive={isActive('/admin/settings')} tooltip="Settings">
+                <Link href="/admin/settings">
+                    <Settings />
+                    <span>Settings</span>
+                </Link>
+             </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
              <SidebarMenuButton asChild tooltip="Sign Out">
                 <Link href="/admin/sign-in">
