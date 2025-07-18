@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal } from "lucide-react"
 import { db } from "@/lib/db"
+import { format } from "date-fns"
 
 export default async function AdminUsersPage() {
     const users = await db.query.users.findMany();
@@ -29,7 +30,7 @@ export default async function AdminUsersPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>All Users</CardTitle>
-                    <CardDescription>A list of all users in the system.</CardDescription>
+                    <CardDescription>A list of all registered users in the system.</CardDescription>
                 </CardHeader>
                 <CardContent>
                 <Table>
@@ -38,6 +39,7 @@ export default async function AdminUsersPage() {
                         <TableHead>Name</TableHead>
                         <TableHead>Email</TableHead>
                         <TableHead>Role</TableHead>
+                        <TableHead>Joined</TableHead>
                         <TableHead>
                         <span className="sr-only">Actions</span>
                         </TableHead>
@@ -52,6 +54,9 @@ export default async function AdminUsersPage() {
                                 <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
                                     {user.role}
                                 </Badge>
+                            </TableCell>
+                            <TableCell>
+                                {user.createdAt ? format(new Date(user.createdAt), "PPP") : 'N/A'}
                             </TableCell>
                             <TableCell>
                                 <DropdownMenu>
