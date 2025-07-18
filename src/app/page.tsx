@@ -90,6 +90,9 @@ export default function LandingPage() {
       <footer className="border-t">
         <div className="container flex items-center justify-between py-6 text-sm text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} CareerCompass. All rights reserved.</p>
+          <nav className="flex gap-4">
+             <Link href="/admin/dashboard" className="hover:text-primary">Admin</Link>
+          </nav>
         </div>
       </footer>
     </div>

@@ -3,10 +3,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardFooter, CardContent }
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowRight, Bot, ClipboardCheck, University, Briefcase, MessageCircle, History, PieChart } from 'lucide-react';
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Pie, Sector } from 'recharts';
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Pie, Sector, CartesianGrid } from 'recharts';
 import { useProfile } from '@/contexts/ProfileContext';
 import { useHistory, type HistoryItem } from '@/contexts/HistoryContext';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
+import { useMemo } from 'react';
 
 const features = [
   { title: 'AI Chatbot', description: 'Get instant answers about careers and universities.', icon: <MessageCircle className="size-8 text-primary" />, href: '/chat' },
@@ -27,18 +28,6 @@ export default function DashboardPage() {
   const { profile } = useProfile();
   const { history } = useHistory();
 
-  const profileCompleteness = [
-    { name: 'Info', value: Object.values(profile).filter(v => typeof v === 'string' && v.length > 0).length / 7 * 100 },
-    { name: 'Experience', value: profile.experience.length > 0 ? 100 : 0 },
-    { name: 'Education', value: profile.education.length > 0 ? 100 : 0 },
-  ];
-  
-  const chartData = [
-    {
-      metric: "Profile",
-      value: Math.round(profileCompleteness.reduce((acc, item) => acc + item.value, 0) / 3)
-    }
-  ];
   const chartConfig = {
     value: {
       label: "Completeness",
@@ -55,6 +44,10 @@ export default function DashboardPage() {
       label: "Remaining",
       color: "hsl(var(--muted))",
     },
+    count: {
+      label: 'Count',
+      color: 'hsl(var(--primary))',
+    },
   };
   
   const recentHistory = history.slice(0, 3);
@@ -66,6 +59,18 @@ export default function DashboardPage() {
     { type: 'completed', value: completedCount, fill: 'var(--color-completed)' },
     { type: 'remaining', value: coreTools.length - completedCount, fill: 'var(--color-remaining)' },
   ];
+
+  const toolUsageData = useMemo(() => {
+    const counts = history.reduce((acc, item) => {
+      acc[item.tool] = (acc[item.tool] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return coreTools.map(tool => ({
+      name: tool.replace(' Analysis', ''),
+      count: counts[tool as HistoryItem['tool']] || 0,
+    }));
+  }, [history]);
 
   return (
     <div className="flex flex-col gap-8 animate-in fade-in-50">
@@ -104,6 +109,61 @@ export default function DashboardPage() {
       </main>
 
       <div className="grid gap-6 lg:grid-cols-3">
+        <Card className="lg:col-span-2">
+           <CardHeader>
+            <CardTitle className="font-headline">Tool Usage Breakdown</CardTitle>
+            <CardDescription>Frequency of each AI tool used.</CardDescription>
+          </CardHeader>
+          <CardContent>
+             <ChartContainer config={chartConfig} className="h-[250px] w-full">
+               <ResponsiveContainer>
+                <BarChart data={toolUsageData} margin={{ top: 20, right: 20, bottom: 5, left: -20 }}>
+                    <CartesianGrid vertical={false} />
+                    <XAxis dataKey="name" tickLine={false} axisLine={false} tickMargin={8} />
+                    <YAxis />
+                    <Tooltip
+                        cursor={false}
+                        content={<ChartTooltipContent hideLabel indicator="dot" />}
+                    />
+                    <Bar dataKey="count" fill="var(--color-count)" radius={8} />
+                </BarChart>
+               </ResponsiveContainer>
+             </ChartContainer>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-headline">Recent Activity</CardTitle>
+            <CardDescription>Your latest interactions with the AI tools.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {recentHistory.length > 0 ? (
+              <ul className="space-y-4">
+                {recentHistory.map(item => (
+                  <li key={item.id} className="flex items-center gap-4">
+                    <div className="p-2 bg-primary/10 rounded-md text-primary">{toolIcons[item.tool]}</div>
+                    <div>
+                      <p className="font-medium">{item.tool}</p>
+                      <p className="text-xs text-muted-foreground">{new Date(item.timestamp).toLocaleDateString()}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-muted-foreground">No recent activity. Try one of the tools!</p>
+            )}
+          </CardContent>
+           <CardFooter>
+             <Button asChild variant="secondary" className="w-full">
+                <Link href="/history">
+                  View All History <History className="ml-2 size-4" />
+                </Link>
+              </Button>
+          </CardFooter>
+        </Card>
+      </div>
+
+       <div className="grid gap-6 lg:grid-cols-3">
          <Card className="lg:col-span-1">
           <CardHeader>
             <CardTitle className="font-headline">Feature Engagement</CardTitle>
@@ -143,67 +203,39 @@ export default function DashboardPage() {
             </ChartContainer>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="font-headline">Profile Completeness</CardTitle>
             <CardDescription>A complete profile gets you better recommendations.</CardDescription>
           </CardHeader>
-          <CardContent>
-             <ChartContainer config={chartConfig} className="h-[100px] w-full">
-              <BarChart accessibilityLayer data={chartData} layout="vertical" margin={{ left: -20 }}>
-                <XAxis type="number" dataKey="value" hide={true} domain={[0, 100]}/>
-                <YAxis type="category" dataKey="metric" hide={true} />
-                <Tooltip 
-                  cursor={{ fill: 'transparent' }} 
-                  content={({ active, payload }) => {
-                    if (active && payload && payload.length) {
-                      return (
-                        <div className="rounded-lg border bg-background p-2 shadow-sm">
-                          <p className="text-sm font-medium">{`${payload[0].value}% Complete`}</p>
-                        </div>
-                      )
-                    }
-                    return null
-                  }} 
-                />
-                <Bar dataKey="value" fill="var(--color-value)" radius={8} background={{ fill: 'hsl(var(--muted))', radius: 8 }}/>
-              </BarChart>
+          <CardContent className="flex items-center pt-8">
+            <ChartContainer config={chartConfig} className="h-[20px] w-full">
+              <ResponsiveContainer>
+                <BarChart layout="vertical" data={[{ name: 'profile', value: 75 }]}>
+                  <XAxis type="number" hide domain={[0, 100]} />
+                  <YAxis type="category" hide dataKey="name" />
+                   <Tooltip 
+                    cursor={{ fill: 'transparent' }} 
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        return (
+                          <div className="rounded-lg border bg-background p-2 shadow-sm">
+                            <p className="text-sm font-medium">{`${payload[0].value}% Complete`}</p>
+                          </div>
+                        )
+                      }
+                      return null
+                    }} 
+                  />
+                  <Bar dataKey="value" fill="var(--color-value)" radius={8} background={{ fill: 'hsl(var(--muted))', radius: 8 }} />
+                </BarChart>
+              </ResponsiveContainer>
             </ChartContainer>
           </CardContent>
-          <CardFooter>
+           <CardFooter className="flex justify-end">
              <Button asChild variant="secondary">
                 <Link href="/profile">
                   Complete Your Profile <ArrowRight className="ml-2 size-4" />
-                </Link>
-              </Button>
-          </CardFooter>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-headline">Recent Activity</CardTitle>
-            <CardDescription>Your latest interactions with the AI tools.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {recentHistory.length > 0 ? (
-              <ul className="space-y-4">
-                {recentHistory.map(item => (
-                  <li key={item.id} className="flex items-center gap-4">
-                    <div className="p-2 bg-primary/10 rounded-md text-primary">{toolIcons[item.tool]}</div>
-                    <div>
-                      <p className="font-medium">{item.tool}</p>
-                      <p className="text-xs text-muted-foreground">{new Date(item.timestamp).toLocaleDateString()}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-muted-foreground">No recent activity. Try one of the tools!</p>
-            )}
-          </CardContent>
-           <CardFooter>
-             <Button asChild variant="secondary" className="w-full">
-                <Link href="/history">
-                  View All History <History className="ml-2 size-4" />
                 </Link>
               </Button>
           </CardFooter>
