@@ -1,140 +1,195 @@
+
 'use client';
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowRight, Bot, ClipboardCheck, University, Briefcase, MessageCircle, History, PieChart, Lightbulb, User } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowRight, BarChart, Briefcase, ChevronRight, FileText, Folder, RefreshCw, University } from 'lucide-react';
 import { useProfile } from '@/contexts/ProfileContext';
-import { useHistory, type HistoryItem } from '@/contexts/HistoryContext';
-import { Progress } from '@/components/ui/progress';
-import { useMemo } from 'react';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
-const toolIcons: Record<HistoryItem['tool'], React.ReactNode> = {
-  'Coach': <Bot className="h-5 w-5" />,
-  'Skills': <ClipboardCheck className="h-5 w-5" />,
-  'UniFinder': <University className="h-5 w-5" />,
-  'Job Analysis': <Briefcase className="h-5 w-5" />,
-};
+const planProgressData = [{ name: 'Completed', value: 75 }, { name: 'Remaining', value: 25 }];
+const COLORS = ['#f97316', 'hsl(var(--muted))'];
 
-const tips = [
-    "Keep your profile up to date to get the best AI-powered career recommendations.",
-    "Use the AI Chatbot to ask quick questions about universities and courses.",
-    "Don't forget to analyze a job's suitability before applying. Let our AI help!",
-    "A detailed Skill Assessment can reveal learning paths you hadn't considered.",
-    "Check the Job Board regularly for new internship and entry-level opportunities."
+const recentActivities = [
+    {
+        title: 'Solar Energy Systems Engineers',
+        category: 'Natural Resources Systems',
+        imgSrc: 'https://placehold.co/400x200.png',
+        dataAiHint: 'solar panels'
+    },
+    {
+        title: 'Wind Energy Engineers',
+        category: 'Engineering and Technology',
+        imgSrc: 'https://placehold.co/400x200.png',
+        dataAiHint: 'wind turbine'
+    },
+    {
+        title: 'Quality Assurance in Web Development',
+        category: 'Network Systems',
+        imgSrc: 'https://placehold.co/400x200.png',
+        dataAiHint: 'web development'
+    },
+    {
+        title: 'Graduate Teaching Assistants',
+        category: 'Teaching/Training',
+        imgSrc: 'https://placehold.co/400x200.png',
+        dataAiHint: 'classroom training'
+    },
 ];
+
+const quickAccessItems = [
+  { title: 'Portfolio', description: 'See your current portfolio.', icon: <Folder className="size-6 text-primary" />, actions: [{ label: 'Edit', href: '/profile' }] },
+  { title: 'Experience Summary', description: 'See the graphical representation of completed projects.', icon: <BarChart className="size-6 text-primary" />, actions: [] },
+  { title: 'Opportunities', description: 'Look for opportunities recommended for you.', icon: <Briefcase className="size-6 text-primary" />, actions: [{ label: 'Virtual Internships', href: '/jobs' }] },
+  { title: 'Find your future', description: 'Search for colleges and universities.', icon: <University className="size-6 text-primary" />, actions: [{ label: 'Applications', href: '/unifinder' }] },
+];
+
 
 export default function DashboardPage() {
   const { profile } = useProfile();
-  const { history } = useHistory();
   
-  const recentHistory = useMemo(() => history.slice(0, 3), [history]);
-
-  const profileCompleteness = useMemo(() => {
-    let score = 0;
-    if (profile.name && profile.name !== 'Jane Doe') score += 1;
-    if (profile.email && profile.email !== 'jane.doe@email.com') score += 1;
-    if (profile.title && profile.title !== 'Aspiring Full Stack Developer') score += 1;
-    if (profile.summary && profile.summary.length > 100) score += 1;
-    if (profile.skills) score += 1;
-    if (profile.experience.length > 0) score += 1;
-    if (profile.education.length > 0) score += 1;
-    return Math.round((score / 7) * 100);
-  }, [profile]);
-  
-  const tipOfTheDay = useMemo(() => tips[Math.floor(Math.random() * tips.length)], []);
-
   return (
-    <div className="flex flex-col gap-8 animate-in fade-in-50">
+    <div className="flex flex-col gap-8">
       <header>
         <h1 className="text-3xl sm:text-4xl font-bold font-headline tracking-tight text-foreground">
-          Welcome back, {profile.name.split(' ')[0]}!
+          Hello, {profile.name.split(' ')[0]}!
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">
-          Let's continue building your future.
+          Here you can access your 4 most recent activities from 18 total. You can add more through courses.
         </p>
       </header>
       
       <main className="grid gap-6 lg:grid-cols-3">
-        <Card className="lg:col-span-2 bg-gradient-to-br from-primary/80 to-accent/80 text-primary-foreground shadow-lg">
-          <CardHeader>
-            <CardTitle className="font-headline text-2xl">Your Career Hub</CardTitle>
-            <CardDescription className="text-primary-foreground/80">Everything you need in one place. Jump back in!</CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-6 sm:grid-cols-2">
-            <div className="space-y-4">
-                <h3 className="font-semibold">Quick Access</h3>
-                <div className="flex flex-col gap-2">
-                    <Button variant="secondary" className="justify-start" asChild><Link href="/coach"><Bot className="mr-2"/>AI Career Coach</Link></Button>
-                    <Button variant="secondary" className="justify-start" asChild><Link href="/jobs"><Briefcase className="mr-2"/>Job Board</Link></Button>
-                    <Button variant="secondary" className="justify-start" asChild><Link href="/chat"><MessageCircle className="mr-2"/>AI Chatbot</Link></Button>
-                </div>
+        {/* Main Content */}
+        <div className="lg:col-span-2 space-y-6">
+            <div className="grid gap-6 sm:grid-cols-2">
+                {recentActivities.map((activity, index) => (
+                    <Card key={index} className="relative overflow-hidden group">
+                        <Image src={activity.imgSrc} alt={activity.title} data-ai-hint={activity.dataAiHint} layout="fill" objectFit="cover" className="absolute inset-0 z-0 transition-transform duration-300 group-hover:scale-105"/>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div className="relative z-10 flex flex-col justify-end h-48 p-4 text-white">
+                           <p className="text-xs uppercase tracking-wider">{activity.category}</p>
+                           <h3 className="font-bold text-lg">{activity.title}</h3>
+                           <Button size="icon" variant="secondary" className="absolute top-4 right-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                               <ArrowRight className="size-4" />
+                           </Button>
+                        </div>
+                    </Card>
+                ))}
             </div>
-            <div className="space-y-4">
-                <h3 className="font-semibold">Your Profile</h3>
-                <p className="text-sm text-primary-foreground/80">A complete profile leads to better recommendations.</p>
-                <div>
-                    <div className="flex justify-between mb-1 text-sm font-medium">
-                        <span>Completeness</span>
-                        <span>{profileCompleteness}%</span>
-                    </div>
-                    <Progress value={profileCompleteness} className="h-2 [&>div]:bg-white" />
-                </div>
-                <Button variant="outline" className="text-foreground" asChild>
-                    <Link href="/profile"><User className="mr-2"/>Update Profile</Link>
-                </Button>
-            </div>
-          </CardContent>
-        </Card>
+             <Card>
+                 <CardContent className="p-6 flex flex-col md:flex-row gap-6 items-center">
+                     <Image src="https://placehold.co/400x300.png" alt="Business Review" data-ai-hint="business meeting" width={150} height={100} className="rounded-md object-cover" />
+                     <div className="flex-1">
+                        <h3 className="font-bold text-xl font-headline">Executive Business Review</h3>
+                        <p className="text-muted-foreground mt-2">An Executive Business Review (EBR) is a strategic meeting with stakeholders from both GitLab and the customer.</p>
+                     </div>
+                     <Button>View catalog</Button>
+                 </CardContent>
+             </Card>
+        </div>
 
-        <Card className="flex flex-col">
-          <CardHeader>
-            <CardTitle className="font-headline flex items-center gap-2">
-              <Lightbulb className="text-accent" /> Tip of the Day
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1">
-            <p className="text-muted-foreground">{tipOfTheDay}</p>
-          </CardContent>
-          <CardFooter>
-            <Button asChild variant="link" className="p-0 text-primary">
-              <Link href="/skills">
-                Assess Your Skills <ArrowRight className="ml-2 size-4" />
-              </Link>
-            </Button>
-          </CardFooter>
-        </Card>
+        {/* Right Sidebar */}
+        <div className="space-y-6">
+            <Card className="bg-primary/90 text-primary-foreground">
+                <CardHeader>
+                    <CardTitle className="text-sm font-light uppercase tracking-wider">Your Plan Progress</CardTitle>
+                    <CardDescription className="text-xl font-bold text-white">Broken Arrow Public Schools -...</CardDescription>
+                </CardHeader>
+                <CardContent className="flex items-center justify-between">
+                    <p className="text-sm text-primary-foreground/80 max-w-[120px]">Track your personal progress within the plan</p>
+                    <div className="relative size-24">
+                       <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie
+                                data={planProgressData}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={28}
+                                outerRadius={35}
+                                startAngle={90}
+                                endAngle={450}
+                                paddingAngle={0}
+                                dataKey="value"
+                                stroke="none"
+                                >
+                                {planProgressData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                                </Pie>
+                            </PieChart>
+                        </ResponsiveContainer>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-xl font-bold text-white">75%</span>
+                        </div>
+                    </div>
+                </CardContent>
+                 <CardFooter>
+                    <Button variant="secondary" className="w-full">View plan</Button>
+                </CardFooter>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="font-headline">Assessment & Survey</CardTitle>
+                    <CardDescription>Find your matching careers</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                    <Link href="#" className="flex items-center justify-between p-3 rounded-md hover:bg-muted">
+                        <div className="flex items-center gap-3">
+                            <BarChart className="size-5 text-primary" />
+                            <span>Assessment recommendations</span>
+                        </div>
+                        <ChevronRight className="size-5 text-muted-foreground" />
+                    </Link>
+                     <Link href="#" className="flex items-center justify-between p-3 rounded-md hover:bg-muted">
+                        <div className="flex items-center gap-3">
+                            <RefreshCw className="size-5 text-primary" />
+                            <div>
+                                <p>Retake assessment</p>
+                                <p className="text-xs text-muted-foreground">Last updated: 02/22/2020</p>
+                            </div>
+                        </div>
+                        <ChevronRight className="size-5 text-muted-foreground" />
+                    </Link>
+                    <Link href="#" className="flex items-center justify-between p-3 rounded-md hover:bg-muted">
+                        <div className="flex items-center gap-3">
+                            <FileText className="size-5 text-primary" />
+                            <span>Career review survey</span>
+                        </div>
+                        <ChevronRight className="size-5 text-muted-foreground" />
+                    </Link>
+                    <Link href="#" className="flex items-center justify-between p-3 rounded-md hover:bg-muted">
+                        <div className="flex items-center gap-3">
+                            <FileText className="size-5 text-primary" />
+                            <span>Final report</span>
+                        </div>
+                        <ChevronRight className="size-5 text-muted-foreground" />
+                    </Link>
+                </CardContent>
+            </Card>
+        </div>
       </main>
 
-      <Card>
-          <CardHeader>
-            <CardTitle className="font-headline">Recent Activity</CardTitle>
-            <CardDescription>Your latest interactions with the AI tools.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {recentHistory.length > 0 ? (
-              <ul className="space-y-4">
-                {recentHistory.map(item => (
-                  <li key={item.id} className="flex items-center gap-4 p-2 rounded-md hover:bg-muted/50">
-                    <div className="p-2 bg-primary/10 rounded-md text-primary">{toolIcons[item.tool]}</div>
-                    <div>
-                      <p className="font-medium">{item.tool}</p>
-                      <p className="text-xs text-muted-foreground">{new Date(item.timestamp).toLocaleString()}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-center py-8 text-muted-foreground">No recent activity. Try one of the tools!</p>
-            )}
-          </CardContent>
-           <CardFooter className="flex justify-end">
-             <Button asChild variant="secondary" className="w-full sm:w-auto">
-                <Link href="/history">
-                  View All History <History className="ml-2 size-4" />
-                </Link>
-              </Button>
-          </CardFooter>
-        </Card>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {quickAccessItems.map(item => (
+            <Card key={item.title} className="p-4">
+                <div className="flex justify-between items-start">
+                    {item.icon}
+                    <Link href="#"><ChevronRight className="size-5 text-muted-foreground hover:text-foreground" /></Link>
+                </div>
+                <h3 className="font-bold mt-4">{item.title}</h3>
+                <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
+                <div className="flex gap-4 mt-4">
+                    {item.actions.map(action => (
+                         <Button key={action.label} variant="link" size="sm" asChild className="p-0 h-auto text-primary">
+                            <Link href={action.href}>{action.label}</Link>
+                         </Button>
+                    ))}
+                </div>
+            </Card>
+        ))}
+      </div>
     </div>
   );
 }
