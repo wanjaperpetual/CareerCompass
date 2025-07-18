@@ -120,7 +120,7 @@ export default function LandingPage() {
               <Card className="flex flex-col">
                 <CardHeader>
                   <CardTitle>Free</CardTitle>
-                  <CardDescription><span className="text-3xl font-bold text-foreground">$0</span> / month</CardDescription>
+                  <CardDescription><span className="text-3xl font-bold text-foreground">KES 0</span> / month</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1">
                    <ul className="space-y-3">
@@ -136,7 +136,7 @@ export default function LandingPage() {
                <Card className="flex flex-col border-primary shadow-lg">
                 <CardHeader>
                   <CardTitle>Pro</CardTitle>
-                  <CardDescription><span className="text-3xl font-bold text-foreground">$15</span> / month</CardDescription>
+                  <CardDescription><span className="text-3xl font-bold text-foreground">KES 1,500</span> / month</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1">
                    <ul className="space-y-3">

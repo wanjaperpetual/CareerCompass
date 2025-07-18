@@ -7,7 +7,7 @@ import { Check } from 'lucide-react';
 const plans = [
   {
     name: 'Free',
-    price: '$0',
+    price: 'KES 0',
     period: '/month',
     features: ['Basic Job Board Access', 'Limited AI Coach Queries', 'Skill Assessment', 'Community Support'],
     cta: 'Current Plan',
@@ -15,7 +15,7 @@ const plans = [
   },
   {
     name: 'Pro',
-    price: '$15',
+    price: 'KES 1,500',
     period: '/month',
     features: [
       'Everything in Free',
