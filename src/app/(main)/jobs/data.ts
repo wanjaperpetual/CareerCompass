@@ -1,3 +1,4 @@
+
 export type Job = {
   id: string;
   title: string;
@@ -121,6 +122,113 @@ M-KOPA is looking for a driven Data Science Intern to join our data team. You'll
 - Proficiency in Python and SQL.
 - Familiarity with data science libraries (e.g., Pandas, Scikit-learn).
 - Strong analytical and quantitative skills.
+`
+  },
+  {
+    id: '6',
+    title: 'Human Resources Assistant',
+    company: 'Dalberg',
+    location: 'Nairobi, Kenya',
+    type: 'Full-time',
+    description: `
+**About the role:**
+Support the HR department in daily administrative tasks. You will be instrumental in recruitment, onboarding, and maintaining employee records, contributing to a positive and efficient workplace.
+
+**Responsibilities:**
+- Assist with posting job openings and screening resumes.
+- Schedule interviews and communicate with candidates.
+- Help with the onboarding process for new hires.
+- Maintain and update employee records.
+
+**Qualifications:**
+- Degree in Human Resources, Business Administration, or a related field.
+- Excellent organizational and communication skills.
+- Familiarity with HR software and MS Office is a plus.
+`
+  },
+  {
+    id: '7',
+    title: 'Graphic Design Intern',
+    company: 'Ogilvy',
+    location: 'Nairobi, Kenya',
+    type: 'Internship',
+    description: `
+**About the role:**
+We are looking for a creative Graphic Design Intern to work on a variety of projects. You will collaborate with our marketing and design teams to create engaging visuals for digital and print media.
+
+**Responsibilities:**
+- Design marketing materials such as social media posts, banners, and brochures.
+- Assist in creating visual content for our website and blog.
+- Participate in brainstorming sessions and contribute creative ideas.
+
+**Qualifications:**
+- A strong portfolio showcasing your design skills.
+- Proficiency in Adobe Creative Suite (Photoshop, Illustrator, InDesign).
+- A keen eye for detail and aesthetics.
+`
+  },
+  {
+    id: '8',
+    title: 'Financial Analyst',
+    company: 'Britam',
+    location: 'Nairobi, Kenya',
+    type: 'Full-time',
+    description: `
+**About the role:**
+As a Financial Analyst, you will be responsible for financial planning, analysis, and projection for our company. You will help us make well-informed commercial decisions.
+
+**Responsibilities:**
+- Analyze financial data and create financial models for decision support.
+- Report on financial performance and prepare for regular leadership reviews.
+- Analyze past results, perform variance analysis, identify trends, and make recommendations for improvements.
+- Work closely with the accounting team to ensure accurate financial reporting.
+
+**Qualifications:**
+- Degree in Finance, Economics, or a related field.
+- Proven experience as a Financial Analyst.
+- Strong analytical and data gathering skills.
+`
+  },
+  {
+    id: '9',
+    title: 'Part-time Research Assistant',
+    company: 'The University of Nairobi',
+    location: 'Nairobi, Kenya',
+    type: 'Part-time',
+    description: `
+**About the role:**
+The Department of Economics is seeking a Part-time Research Assistant to support ongoing research projects. This role is ideal for a current postgraduate student.
+
+**Responsibilities:**
+- Conduct literature reviews and data collection.
+- Assist with data analysis and preparation of reports.
+- Provide administrative support for research activities.
+
+**Qualifications:**
+- Currently enrolled in a Master's program in Economics or a related field.
+- Strong research and analytical skills.
+- Excellent written and verbal communication skills.
+`
+  },
+  {
+    id: '10',
+    title: 'Mechanical Engineering Intern',
+    company: 'Davis & Shirtliff',
+    location: 'Nairobi, Kenya',
+    type: 'Internship',
+    description: `
+**About the role:**
+Gain practical experience in the engineering field with a leading supplier of water and energy solutions. You will work with our team on various projects related to product design, testing, and implementation.
+
+**Responsibilities:**
+- Assist in the design and analysis of mechanical systems.
+- Participate in product development and testing.
+- Prepare technical drawings and documentation.
+
+**Qualifications:**
+- Pursuing a degree in Mechanical Engineering.
+- Basic understanding of engineering principles and CAD software.
+- Eager to learn and apply theoretical knowledge to real-world problems.
 `
   }
 ];

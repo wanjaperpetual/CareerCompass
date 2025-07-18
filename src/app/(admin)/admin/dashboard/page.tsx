@@ -5,10 +5,14 @@ import { Badge } from '@/components/ui/badge';
 import { Bot, Briefcase, Users } from 'lucide-react';
 
 const recentActivity = [
-  { id: 1, user: 'Alice', action: 'Generated career advice', tool: 'Coach', time: '2m ago' },
+  { id: 1, user: 'Alice', action: 'Generated career advice for "Medicine"', tool: 'Coach', time: '2m ago' },
   { id: 2, user: 'Bob', action: 'Analyzed job suitability for "Software Engineer"', tool: 'Job Analysis', time: '5m ago' },
-  { id: 3, user: 'Charlie', action: 'Searched for "Computer Science" programs', tool: 'UniFinder', time: '10m ago' },
-  { id: 4, user: 'David', action: 'Generated a skill plan for "Python"', tool: 'Skills', time: '1h ago' },
+  { id: 3, user: 'Charlie', action: 'Searched for "Computer Science" programs in Nairobi', tool: 'UniFinder', time: '10m ago' },
+  { id: 4, user: 'David', action: 'Generated a skill plan for "Python & Data Analysis"', tool: 'Skills', time: '1h ago' },
+  { id: 5, user: 'Eve', action: 'Used AI Chatbot to ask about KCSE requirements', tool: 'Chat', time: '2h ago' },
+  { id: 6, user: 'Frank', action: 'Generated career advice for "Law"', tool: 'Coach', time: '3h ago' },
+  { id: 7, user: 'Grace', action: 'Searched for "Business Administration" programs', tool: 'UniFinder', time: '5h ago' },
+  { id: 8, user: 'Heidi', action: 'Analyzed job suitability for "Marketing Manager"', tool: 'Job Analysis', time: '1d ago' },
 ];
 
 export default function AdminDashboardPage() {
