@@ -4,14 +4,10 @@ import { redirect } from 'next/navigation';
 import { AppSidebar } from '@/components/admin/AdminSidebar';
 import { AdminUserNav } from '@/components/admin/AdminUserNav';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { useProfile } from '@/contexts/ProfileContext';
+import { useProfile, ProfileProvider } from '@/contexts/ProfileContext';
 import { useEffect, useState } from 'react';
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const { profile, isProfileLoading } = useProfile();
   const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -52,4 +48,17 @@ export default function AdminLayout({
         </SidebarProvider>
     </div>
   );
+}
+
+
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <ProfileProvider>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </ProfileProvider>
+  )
 }
