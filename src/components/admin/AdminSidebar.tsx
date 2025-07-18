@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { Shield, LayoutDashboard, Users, Settings, LogOut, FileText, Briefcase, GraduationCap } from 'lucide-react';
+import { Shield, LayoutDashboard, Users, Settings, FileText, Briefcase, GraduationCap } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -22,17 +22,16 @@ export function AppSidebar() {
 
   const menuItems = [
     { href: '/admin/dashboard', icon: <LayoutDashboard />, label: 'Dashboard' },
-    { href: '/admin/users', icon: <Users />, label: 'User Management' },
+    { href: '/admin/users', icon: <Users />, label: 'Users' },
     { href: '/admin/content', icon: <FileText />, label: 'Content' },
-    { href: '/admin/jobs', icon: <Briefcase />, label: 'Jobs' },
-    { href: '/admin/universities', icon: <GraduationCap />, label: 'Universities' },
+    { href: '/admin/settings', icon: <Settings />, label: 'Settings' },
   ];
 
   return (
-    <Sidebar variant="inset" collapsible="icon">
+    <Sidebar variant="sidebar" collapsible="icon">
       <SidebarHeader>
         <Link href="/admin/dashboard" className="flex items-center gap-2.5">
-          <Shield className="size-8 text-primary" />
+          <Shield className="size-8 text-sidebar-accent" />
           <h1 className="text-xl font-bold font-headline text-sidebar-foreground">Admin</h1>
         </Link>
       </SidebarHeader>
@@ -51,24 +50,10 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-             <SidebarMenuButton asChild isActive={isActive('/admin/settings')} tooltip="Settings">
-                <Link href="/admin/settings">
-                    <Settings />
-                    <span>Settings</span>
-                </Link>
-             </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-             <SidebarMenuButton asChild tooltip="Sign Out">
-                <Link href="/admin/sign-in">
-                    <LogOut />
-                    <span>Sign Out</span>
-                </Link>
-             </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <div className="m-2 p-4 rounded-lg bg-sidebar-accent/10 text-center text-sidebar-foreground">
+            <h3 className="font-bold font-headline">CareerCompass</h3>
+            <p className="text-xs text-sidebar-foreground/70 mt-1">Admin Portal</p>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );

@@ -3,8 +3,8 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow, TableHead, TableHeader } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Bot, Briefcase, Users, FileText, ArrowUp, ArrowDown, GraduationCap, ClipboardCheck, BookOpen, Building2 } from 'lucide-react';
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart";
+import { Bot, Briefcase, Users, ArrowUp, ArrowDown, BookOpen } from 'lucide-react';
+import { ChartContainer, ChartTooltipContent, ChartConfig } from "@/components/ui/chart";
 import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip as RechartsTooltip, Line, LineChart } from 'recharts';
 
 const recentActivity = [
