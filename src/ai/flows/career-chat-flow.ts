@@ -25,18 +25,7 @@ const CareerChatOutputSchema = z.object({
 export type CareerChatOutput = z.infer<typeof CareerChatOutputSchema>;
 
 export async function careerChat(input: CareerChatInput): Promise<CareerChatOutput> {
-  const history = input.history.map((msg) => ({
-    role: msg.role,
-    content: [{text: msg.content}],
-  }));
-
-  const {text} = await ai.generate({
-    model: 'googleai/gemini-2.0-flash',
-    history: [
-      ...history,
-      { role: 'user', content: [{ text: input.message }] },
-    ],
-    system: `You are an intelligent and friendly AI assistant designed to help Kenyan high school students make informed decisions about their careers, university programs, and study resources.
+  const systemPrompt = `You are an intelligent and friendly AI assistant designed to help Kenyan high school students make informed decisions about their careers, university programs, and study resources.
 
 Your main role is to guide users by answering questions about:
 
@@ -62,7 +51,20 @@ When asked to recommend schools or programs, request the student’s location or
 Always end your answers with a helpful follow-up or encouragement like:
 “Would you like a list of universities that offer this course?”
 “I can suggest some learning resources too, if you want!”
-“Keep exploring—you're doing great!”`,
+“Keep exploring—you're doing great!”`;
+
+  const conversationHistory = input.history.map(msg => ({
+    role: msg.role as 'user' | 'model',
+    content: [{ text: msg.content }],
+  }));
+
+  const {text} = await ai.generate({
+    model: 'googleai/gemini-2.0-flash',
+    system: systemPrompt,
+    history: [
+      ...conversationHistory,
+      { role: 'user', content: [{ text: input.message }] },
+    ],
   });
 
   return {reply: text};
