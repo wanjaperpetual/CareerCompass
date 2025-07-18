@@ -190,7 +190,6 @@ export default function LandingPage() {
           <nav className="flex gap-4">
              <Link href="#" className="hover:text-primary">Terms</Link>
              <Link href="#" className="hover:text-primary">Privacy</Link>
-             <Link href="/admin/dashboard" className="hover:text-primary">Admin</Link>
           </nav>
         </div>
       </footer>

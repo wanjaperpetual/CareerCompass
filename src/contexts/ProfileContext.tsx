@@ -14,6 +14,7 @@ export type ProfileData = {
   skills: string; // comma-separated
   experience: Experience[];
   education: Education[];
+  role: 'user' | 'admin';
 };
 
 const defaultProfile: ProfileData = {
@@ -26,7 +27,15 @@ const defaultProfile: ProfileData = {
   skills: 'JavaScript, React, Node.js, Next.js, SQL, Python, HTML, CSS, Git, Docker',
   experience: [],
   education: [],
+  role: 'user', // Default role is 'user'
 };
+
+type ProfileContextType = {
+  profile: ProfileData;
+  setProfile: Dispatch<SetStateAction<ProfileData>>;
+  isProfileLoading: boolean;
+};
+
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 

@@ -1,21 +1,38 @@
+'use client';
+
 import { redirect } from 'next/navigation';
 import { AppSidebar } from '@/components/admin/AdminSidebar';
 import { AdminUserNav } from '@/components/admin/AdminUserNav';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-
+import { useProfile } from '@/contexts/ProfileContext';
+import { useEffect, useState } from 'react';
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  // In a real application, you would implement proper authentication logic here.
-  // This would involve checking for a valid session and verifying if the user
-  // has the 'admin' role in your database.
-  const isAdmin = true; // Replace with actual auth check for admin role
+  const { profile, isProfileLoading } = useProfile();
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
-  if (!isAdmin) {
-    redirect('/admin/sign-in');
+  useEffect(() => {
+    if (!isProfileLoading) {
+      // In a real application, you would verify a server-side session.
+      // For this simulation, we check the role from the client-side profile context.
+      const isAdmin = profile.role === 'admin';
+      
+      if (!isAdmin) {
+        redirect('/dashboard');
+      } else {
+        setIsAuthorized(true);
+      }
+    }
+  }, [isProfileLoading, profile.role]);
+
+  // Render a loading state or nothing until authorization is confirmed
+  // to prevent brief flashes of the admin layout for unauthorized users.
+  if (!isAuthorized) {
+    return null; 
   }
 
   return (
