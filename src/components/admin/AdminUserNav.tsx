@@ -1,6 +1,6 @@
 'use client';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -24,11 +24,10 @@ export function AdminUserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-9 w-9">
-            <AvatarFallback>A</AvatarFallback>
-          </Avatar>
-        </Button>
+         <div
+              className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 cursor-pointer"
+              style={{backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBgObwUW6NrpGxkcC1nCnTGn9ksEkKjZs0WM2ZS_KYYEG2e7Z7E1Zw1YQ90QALLQThKd5mZGGo1vPx_QoFpsOlzinl-CufLu6kiPcrCttfxpqwYZDNK83ji1eJ4sErcgi-ecv4YuTDcI5hD0VN9DsOTGgJOSYJjpQ6QvJSXgOVTjRC1JinLHyIYkQ00BcmOi80jFIjECREpKvbqRBGG3ogiVVZbD_WJQEfOSHdvyHGhP4avI83e6323N66D2hYrWtvfoDd9SJfQO1bq")'}}
+            ></div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">

@@ -2,13 +2,10 @@
 'use client';
 
 import { redirect } from 'next/navigation';
-import { AppSidebar } from '@/components/admin/AdminSidebar';
-import { AdminUserNav } from '@/components/admin/AdminUserNav';
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { useProfile, ProfileProvider } from '@/contexts/ProfileContext';
 import { useEffect, useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { AdminUserNav } from '@/components/admin/AdminUserNav';
+import Link from 'next/link';
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const { profile, isProfileLoading } = useProfile();
@@ -35,29 +32,31 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="admin-theme">
-        <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-            <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center gap-4">
-                    <SidebarTrigger className="md:hidden" />
-                    <div className="relative hidden md:block">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            type="search"
-                            placeholder="Search..."
-                            className="w-full rounded-lg bg-secondary pl-8 md:w-[200px] lg:w-[336px]"
-                        />
-                    </div>
-                </div>
-                <AdminUserNav />
-            </header>
-            <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 min-h-[calc(100vh-4rem)]">
-                {children}
+    <div className="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden">
+      <div className="layout-container flex h-full grow flex-col">
+        <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f1f2f4] px-10 py-3">
+          <div className="flex items-center gap-4 text-[#121416]">
+            <div className="size-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" clipRule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor"></path>
+              </svg>
             </div>
-            </SidebarInset>
-        </SidebarProvider>
+            <h2 className="text-[#121416] text-lg font-bold leading-tight tracking-[-0.015em]">AI Career Guide Admin</h2>
+          </div>
+          <div className="flex flex-1 justify-end gap-8 items-center">
+            <div className="flex items-center gap-9">
+              <Link className="text-[#121416] text-sm font-medium leading-normal" href="/admin/dashboard">Dashboard</Link>
+              <Link className="text-[#121416] text-sm font-medium leading-normal" href="/admin/users">Users</Link>
+              <Link className="text-[#121416] text-sm font-medium leading-normal" href="#">Reports</Link>
+              <Link className="text-[#121416] text-sm font-medium leading-normal" href="/admin/settings">Settings</Link>
+            </div>
+            <AdminUserNav />
+          </div>
+        </header>
+        <div className="flex flex-1 justify-center py-5">
+            {children}
+        </div>
+      </div>
     </div>
   );
 }
