@@ -15,12 +15,13 @@ import { usePathname } from 'next/navigation';
 export function AppSidebar() {
   const pathname = usePathname();
   const isActive = (path: string) => {
-    if (path === '/') return pathname === path;
+    // Special case for dashboard to avoid matching all sub-routes
+    if (path === '/dashboard') return pathname === path;
     return pathname.startsWith(path);
   }
 
   const menuItems = [
-    { href: '/', icon: <LayoutDashboard />, label: 'Dashboard' },
+    { href: '/dashboard', icon: <LayoutDashboard />, label: 'Dashboard' },
     { href: '/chat', icon: <MessageCircle />, label: 'Chatbot' },
     { href: '/coach', icon: <Bot />, label: 'AI Career Coach' },
     { href: '/skills', icon: <ClipboardCheck />, label: 'Skill Assessment' },
@@ -31,7 +32,7 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <Link href="/" className="flex items-center gap-2.5">
+        <Link href="/dashboard" className="flex items-center gap-2.5">
           <Compass className="size-8 text-primary" />
           <h1 className="text-xl font-bold font-headline text-foreground">CareerCompass</h1>
         </Link>
