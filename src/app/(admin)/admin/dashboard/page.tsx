@@ -1,10 +1,12 @@
+
 'use client';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Bot, Briefcase, Users, BarChart, PieChart } from 'lucide-react';
+import { Bot, Briefcase, Users, BarChart, FileText, ArrowUp, ArrowDown } from 'lucide-react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart";
-import { Bar, BarChart as RechartsBarChart, Pie, PieChart as RechartsPieChart, ResponsiveContainer, Cell, XAxis, YAxis, Tooltip as RechartsTooltip, CartesianGrid, Legend } from 'recharts';
+import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip as RechartsTooltip, CartesianGrid } from 'recharts';
+import { Button } from '@/components/ui/button';
 
 const recentActivity = [
   { id: 1, user: 'Alice', action: 'Generated career advice for "Medicine"', tool: 'Coach', time: '2m ago' },
@@ -13,170 +15,142 @@ const recentActivity = [
   { id: 4, user: 'David', action: 'Generated a skill plan for "Python & Data Analysis"', tool: 'Skills', time: '1h ago' },
   { id: 5, user: 'Eve', action: 'Used AI Chatbot to ask about KCSE requirements', tool: 'Chat', time: '2h ago' },
   { id: 6, user: 'Frank', action: 'Generated career advice for "Law"', tool: 'Coach', time: '3h ago' },
-  { id: 7, user: 'Grace', action: 'Searched for "Business Administration" programs', tool: 'UniFinder', time: '5h ago' },
-  { id: 8, user: 'Heidi', action: 'Analyzed job suitability for "Marketing Manager"', tool: 'Job Analysis', time: '1d ago' },
 ];
 
-const queriesByToolData = [
-    { tool: 'Coach', queries: 120, fill: "hsl(var(--chart-1))" },
-    { tool: 'Job Analysis', queries: 80, fill: "hsl(var(--chart-2))" },
-    { tool: 'UniFinder', queries: 150, fill: "hsl(var(--chart-3))" },
-    { tool: 'Skills', queries: 95, fill: "hsl(var(--chart-4))" },
-    { tool: 'Chat', queries: 228, fill: "hsl(var(--chart-5))" },
+const queriesByDayData = [
+  { date: 'Mon', queries: 220 },
+  { date: 'Tue', queries: 180 },
+  { date: 'Wed', queries: 250 },
+  { date: 'Thu', queries: 210 },
+  { date: 'Fri', queries: 300 },
+  { date: 'Sat', queries: 280 },
+  { date: 'Sun', queries: 350 },
 ];
 
-const userRolesData = [
-  { name: 'Admin', value: 3, fill: 'hsl(var(--chart-1))' },
-  { name: 'User', value: 1254, fill: 'hsl(var(--chart-2))' },
-];
-
-const barChartConfig = {
+const chartConfig = {
   queries: {
     label: "Queries",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
-const pieChartConfig = {
-  users: {
-    label: "Users",
-  },
-  admin: {
-    label: "Admin",
-    color: "hsl(var(--chart-1))",
-  },
-  user: {
-    label: "User",
-    color: "hsl(var(--chart-2))",
-  },
-} satisfies ChartConfig;
-
 
 export default function AdminDashboardPage() {
   return (
-    <div className="flex flex-col gap-8">
-      <header>
-        <h1 className="text-3xl sm:text-4xl font-bold font-headline tracking-tight text-foreground">
-          Admin Dashboard
-        </h1>
-        <p className="mt-2 text-lg text-muted-foreground">
-          Welcome back! Here's an overview of your application's activity.
-        </p>
+    <div className="flex flex-col gap-6 text-foreground">
+      <header className="flex justify-between items-center">
+        <div>
+            <h1 className="text-3xl font-bold font-headline tracking-tight">
+            Hello Admin!
+            </h1>
+            <p className="text-lg text-muted-foreground">
+            Displaying data for the last 7 days.
+            </p>
+        </div>
+        <div className="flex items-center gap-4">
+            <Button variant="outline">Export Data</Button>
+            <Button className="bg-green-500 hover:bg-green-600 text-white">See AI Actions</Button>
+        </div>
       </header>
 
-      <main className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+         <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Users</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">1,257</div>
-            <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+                <ArrowUp className="h-3 w-3 text-green-500"/>
+                <span>+20.1% from last month</span>
+            </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Jobs Listed</CardTitle>
             <Briefcase className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">84</div>
-            <p className="text-xs text-muted-foreground">+12 since last week</p>
+             <p className="text-xs text-muted-foreground flex items-center gap-1">
+                <ArrowUp className="h-3 w-3 text-green-500"/>
+                <span>+12 since last week</span>
+            </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">AI Queries Today</CardTitle>
             <Bot className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">573</div>
-            <p className="text-xs text-muted-foreground">+32 since yesterday</p>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+                <ArrowDown className="h-3 w-3 text-red-500"/>
+                <span>-5% since yesterday</span>
+            </p>
           </CardContent>
         </Card>
-         <Card>
+         <Card className="bg-green-500/10 border-green-500/50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Users Today</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">AI Recommendations</CardTitle>
+            <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">342</div>
-            <p className="text-xs text-muted-foreground">+15% from yesterday</p>
-          </CardContent>
-        </Card>
-      </main>
-
-      <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-5">
-        <Card className="lg:col-span-3">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2"> <BarChart className="h-5 w-5"/> AI Queries by Tool</CardTitle>
-            <CardDescription>A breakdown of which AI tools are being used the most.</CardDescription>
-          </CardHeader>
-          <CardContent>
-             <ChartContainer config={barChartConfig} className="min-h-[200px] w-full">
-               <RechartsBarChart data={queriesByToolData} accessibilityLayer>
-                 <CartesianGrid vertical={false} />
-                 <XAxis dataKey="tool" tickLine={false} tickMargin={10} axisLine={false} />
-                 <YAxis />
-                 <RechartsTooltip cursor={false} content={<ChartTooltipContent indicator="dot" />} />
-                 <Legend />
-                 <Bar dataKey="queries" radius={4} />
-               </RechartsBarChart>
-             </ChartContainer>
-          </CardContent>
-        </Card>
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2"><PieChart className="h-5 w-5"/> User Role Distribution</CardTitle>
-             <CardDescription>A look at the distribution of user roles in the system.</CardDescription>
-          </CardHeader>
-          <CardContent>
-             <ChartContainer config={pieChartConfig} className="min-h-[200px] w-full">
-                <RechartsPieChart>
-                    <RechartsTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                    <Pie data={userRolesData} dataKey="value" nameKey="name" innerRadius={50} strokeWidth={5}>
-                         {userRolesData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.fill} />
-                        ))}
-                    </Pie>
-                     <Legend content={<ChartTooltipContent hideLabel hideIndicator />} />
-                </RechartsPieChart>
-             </ChartContainer>
+            <div className="text-2xl font-bold">8 Actions</div>
+            <p className="text-xs text-green-400">Recommended based on new user signups.</p>
           </CardContent>
         </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent AI Activity</CardTitle>
-          <CardDescription>A log of the most recent user interactions with AI tools.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>User</TableHead>
-                <TableHead>Action</TableHead>
-                <TableHead>Tool</TableHead>
-                <TableHead>Time</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {recentActivity.map((activity) => (
-                <TableRow key={activity.id}>
-                  <TableCell className="font-medium">{activity.user}</TableCell>
-                  <TableCell>{activity.action}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{activity.tool}</Badge>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">{activity.time}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <div className="grid gap-6 md:grid-cols-5">
+        <Card className="md:col-span-3 bg-card/50 backdrop-blur-sm">
+            <CardHeader>
+                <CardTitle>AI Query Analytics</CardTitle>
+                <CardDescription>Total queries over the last 7 days.</CardDescription>
+            </CardHeader>
+            <CardContent className="h-[250px]">
+                 <ChartContainer config={chartConfig} className="w-full h-full">
+                    <AreaChart data={queriesByDayData} margin={{ top: 5, right: 20, left: -10, bottom: 0 }}>
+                        <defs>
+                            <linearGradient id="colorQueries" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="hsl(var(--chart-1))" stopOpacity={0.8}/>
+                            <stop offset="95%" stopColor="hsl(var(--chart-1))" stopOpacity={0.1}/>
+                            </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border)/0.5)"/>
+                        <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} />
+                        <YAxis tickLine={false} axisLine={false} tickMargin={8} />
+                        <RechartsTooltip cursor={true} content={<ChartTooltipContent indicator="dot" />} />
+                        <Area type="monotone" dataKey="queries" stroke="hsl(var(--chart-1))" fillOpacity={1} fill="url(#colorQueries)" />
+                    </AreaChart>
+                </ChartContainer>
+            </CardContent>
+        </Card>
+        <Card className="md:col-span-2 bg-card/50 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle>Recent AI Activity</CardTitle>
+            <CardDescription>A log of recent user interactions.</CardDescription>
+          </CardHeader>
+          <CardContent className="h-[250px] overflow-auto">
+            <Table>
+                <TableBody>
+                {recentActivity.map((activity) => (
+                    <TableRow key={activity.id} className="border-b-white/5">
+                    <TableCell className="font-medium p-2">{activity.user}</TableCell>
+                    <TableCell className="text-muted-foreground p-2">{activity.action.length > 25 ? `${activity.action.substring(0, 25)}...` : activity.action}</TableCell>
+                    <TableCell className="p-2">
+                        <Badge variant="secondary">{activity.tool}</Badge>
+                    </TableCell>
+                    </TableRow>
+                ))}
+                </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

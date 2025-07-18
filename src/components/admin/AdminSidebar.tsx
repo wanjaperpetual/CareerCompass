@@ -21,9 +21,6 @@ export function AppSidebar() {
   const menuItems = [
     { href: '/admin/dashboard', icon: <LayoutDashboard />, label: 'Dashboard' },
     { href: '/admin/users', icon: <Users />, label: 'Users' },
-    // Add more admin pages here later
-    // { href: '/admin/jobs', icon: <Briefcase />, label: 'Jobs' },
-    // { href: '/admin/settings', icon: <Settings />, label: 'Settings' },
   ];
 
   return (
@@ -31,7 +28,7 @@ export function AppSidebar() {
       <SidebarHeader>
         <Link href="/admin/dashboard" className="flex items-center gap-2.5">
           <Shield className="size-8 text-primary" />
-          <h1 className="text-xl font-bold font-headline text-foreground">Admin Portal</h1>
+          <h1 className="text-xl font-bold font-headline text-sidebar-foreground">Admin Portal</h1>
         </Link>
       </SidebarHeader>
       <SidebarContent>
