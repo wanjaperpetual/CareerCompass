@@ -3,193 +3,156 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import Image from 'next/image';
-import { ArrowRight, BarChart, Briefcase, ChevronRight, FileText, Folder, RefreshCw, University } from 'lucide-react';
+import { ArrowRight, BarChart3, Bot, Briefcase, ChevronRight, ClipboardCheck, History, University, User } from 'lucide-react';
 import { useProfile } from '@/contexts/ProfileContext';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { useHistory } from '@/contexts/HistoryContext';
+import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { Progress } from '@/components/ui/progress';
 
-const planProgressData = [{ name: 'Completed', value: 75 }, { name: 'Remaining', value: 25 }];
-const COLORS = ['#f97316', 'hsl(var(--muted))'];
-
-const recentActivities = [
-    {
-        title: 'Solar Energy Systems Engineers',
-        category: 'Natural Resources Systems',
-        imgSrc: 'https://placehold.co/400x200.png',
-        dataAiHint: 'solar panels'
-    },
-    {
-        title: 'Wind Energy Engineers',
-        category: 'Engineering and Technology',
-        imgSrc: 'https://placehold.co/400x200.png',
-        dataAiHint: 'wind turbine'
-    },
-    {
-        title: 'Quality Assurance in Web Development',
-        category: 'Network Systems',
-        imgSrc: 'https://placehold.co/400x200.png',
-        dataAiHint: 'web development'
-    },
-    {
-        title: 'Graduate Teaching Assistants',
-        category: 'Teaching/Training',
-        imgSrc: 'https://placehold.co/400x200.png',
-        dataAiHint: 'classroom training'
-    },
-];
+const toolIcons: Record<string, React.ReactNode> = {
+  'Coach': <Bot className="h-4 w-4" />,
+  'Skills': <ClipboardCheck className="h-4 w-4" />,
+  'UniFinder': <University className="h-4 w-4" />,
+  'Job Analysis': <Briefcase className="h-4 w-4" />,
+};
 
 const quickAccessItems = [
-  { title: 'Portfolio', description: 'See your current portfolio.', icon: <Folder className="size-6 text-primary" />, actions: [{ label: 'Edit', href: '/profile' }] },
-  { title: 'Experience Summary', description: 'See the graphical representation of completed projects.', icon: <BarChart className="size-6 text-primary" />, actions: [] },
-  { title: 'Opportunities', description: 'Look for opportunities recommended for you.', icon: <Briefcase className="size-6 text-primary" />, actions: [{ label: 'Virtual Internships', href: '/jobs' }] },
-  { title: 'Find your future', description: 'Search for colleges and universities.', icon: <University className="size-6 text-primary" />, actions: [{ label: 'Applications', href: '/unifinder' }] },
+  { title: 'AI Career Coach', description: 'Get personalized career advice.', href: '/coach', icon: <Bot className="size-6 text-primary" /> },
+  { title: 'Skill Assessment', description: 'Generate a skill improvement plan.', href: '/skills', icon: <ClipboardCheck className="size-6 text-primary" /> },
+  { title: 'UniFinder Kenya', description: 'Find suitable Kenyan universities.', href: '/unifinder', icon: <University className="size-6 text-primary" /> },
+  { title: 'Job Board', description: 'Discover job opportunities.', href: '/jobs', icon: <Briefcase className="size-6 text-primary" /> },
 ];
 
-
 export default function DashboardPage() {
-  const { profile } = useProfile();
+  const { profile, isProfileLoading } = useProfile();
+  const { history, isLoading: isHistoryLoading } = useHistory();
+
+  const toolUsageData = quickAccessItems.map(item => ({
+      name: item.title,
+      count: history.filter(h => h.tool === item.title.split(' ')[0]).length,
+  }));
+  
+  const profileCompleteness = Math.round(
+      (Object.values(profile).filter(value => {
+        if (typeof value === 'string') return value.trim() !== '';
+        if (Array.isArray(value)) return value.length > 0;
+        return false;
+      }).length / Object.keys(profile).length) * 100
+  );
   
   return (
     <div className="flex flex-col gap-8">
       <header>
         <h1 className="text-3xl sm:text-4xl font-bold font-headline tracking-tight text-foreground">
-          Hello, {profile.name.split(' ')[0]}!
+          Hello, {isProfileLoading ? '...' : profile.name.split(' ')[0]}!
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">
-          Here you can access your 4 most recent activities from 18 total. You can add more through courses.
+          Welcome back to your career dashboard. Let's help you find your path.
         </p>
       </header>
       
       <main className="grid gap-6 lg:grid-cols-3">
-        {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
-            <div className="grid gap-6 sm:grid-cols-2">
-                {recentActivities.map((activity, index) => (
-                    <Card key={index} className="relative overflow-hidden group">
-                        <Image src={activity.imgSrc} alt={activity.title} data-ai-hint={activity.dataAiHint} layout="fill" objectFit="cover" className="absolute inset-0 z-0 transition-transform duration-300 group-hover:scale-105"/>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                        <div className="relative z-10 flex flex-col justify-end h-48 p-4 text-white">
-                           <p className="text-xs uppercase tracking-wider">{activity.category}</p>
-                           <h3 className="font-bold text-lg">{activity.title}</h3>
-                           <Button size="icon" variant="secondary" className="absolute top-4 right-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                               <ArrowRight className="size-4" />
-                           </Button>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="font-headline flex items-center gap-2">
+                        <BarChart3 className="size-6 text-primary"/>
+                        AI Tool Usage
+                    </CardTitle>
+                    <CardDescription>
+                        See which tools you're using the most.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                     {isHistoryLoading ? <p>Loading chart...</p> : (
+                         <div className="h-72">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <RechartsBarChart data={toolUsageData}>
+                                <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                                <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} />
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: 'hsl(var(--background))',
+                                        borderColor: 'hsl(var(--border))'
+                                    }}
+                                />
+                                <Legend wrapperStyle={{fontSize: "12px"}}/>
+                                <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                                </RechartsBarChart>
+                            </ResponsiveContainer>
                         </div>
-                    </Card>
-                ))}
-            </div>
+                     )}
+                </CardContent>
+            </Card>
+
              <Card>
-                 <CardContent className="p-6 flex flex-col md:flex-row gap-6 items-center">
-                     <Image src="https://placehold.co/400x300.png" alt="Business Review" data-ai-hint="business meeting" width={150} height={100} className="rounded-md object-cover" />
-                     <div className="flex-1">
-                        <h3 className="font-bold text-xl font-headline">Executive Business Review</h3>
-                        <p className="text-muted-foreground mt-2">An Executive Business Review (EBR) is a strategic meeting with stakeholders from both GitLab and the customer.</p>
-                     </div>
-                     <Button>View catalog</Button>
+                 <CardHeader>
+                    <CardTitle className="font-headline flex items-center gap-2"><History className="size-6 text-primary"/>Recent Activity</CardTitle>
+                    <CardDescription>A log of your most recent interactions with AI tools.</CardDescription>
+                </CardHeader>
+                 <CardContent>
+                    {isHistoryLoading ? (
+                        <p>Loading history...</p>
+                    ) : history.length === 0 ? (
+                        <p className="text-muted-foreground">No recent activity. Try using one of the AI tools!</p>
+                    ) : (
+                        <ul className="space-y-4">
+                            {history.slice(0, 3).map(item => (
+                                <li key={item.id} className="flex items-center gap-4">
+                                    <div className="p-2 bg-primary/10 text-primary rounded-md">{toolIcons[item.tool]}</div>
+                                    <div>
+                                        <p className="font-semibold">{item.tool}</p>
+                                        <p className="text-sm text-muted-foreground">{new Date(item.timestamp).toLocaleDateString()}</p>
+                                    </div>
+                                    <Button variant="outline" size="sm" asChild className="ml-auto">
+                                        <Link href="/history">View <ChevronRight className="ml-1 size-4"/></Link>
+                                    </Button>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                  </CardContent>
              </Card>
         </div>
 
-        {/* Right Sidebar */}
         <div className="space-y-6">
-            <Card className="bg-primary/90 text-primary-foreground">
+            <Card>
                 <CardHeader>
-                    <CardTitle className="text-sm font-light uppercase tracking-wider">Your Plan Progress</CardTitle>
-                    <CardDescription className="text-xl font-bold text-white">Broken Arrow Public Schools -...</CardDescription>
+                    <CardTitle className="font-headline flex items-center gap-2"><User className="size-6 text-primary" />Your Profile</CardTitle>
                 </CardHeader>
-                <CardContent className="flex items-center justify-between">
-                    <p className="text-sm text-primary-foreground/80 max-w-[120px]">Track your personal progress within the plan</p>
-                    <div className="relative size-24">
-                       <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                                <Pie
-                                data={planProgressData}
-                                cx="50%"
-                                cy="50%"
-                                innerRadius={28}
-                                outerRadius={35}
-                                startAngle={90}
-                                endAngle={450}
-                                paddingAngle={0}
-                                dataKey="value"
-                                stroke="none"
-                                >
-                                {planProgressData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                ))}
-                                </Pie>
-                            </PieChart>
-                        </ResponsiveContainer>
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-xl font-bold text-white">75%</span>
+                <CardContent className="space-y-4">
+                    <div>
+                        <div className="flex justify-between mb-1">
+                            <span className="text-sm font-medium text-foreground">Profile Completeness</span>
+                            <span className="text-sm font-medium text-primary">{profileCompleteness}%</span>
                         </div>
+                        <Progress value={profileCompleteness} />
                     </div>
+                    <Button asChild className="w-full">
+                        <Link href="/profile">Edit Profile <ArrowRight className="ml-2 size-4" /></Link>
+                    </Button>
                 </CardContent>
-                 <CardFooter>
-                    <Button variant="secondary" className="w-full">View plan</Button>
-                </CardFooter>
             </Card>
             <Card>
                 <CardHeader>
-                    <CardTitle className="font-headline">Assessment & Survey</CardTitle>
-                    <CardDescription>Find your matching careers</CardDescription>
+                    <CardTitle className="font-headline">Quick Access</CardTitle>
+                    <CardDescription>Jump right back in.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                    <Link href="#" className="flex items-center justify-between p-3 rounded-md hover:bg-muted">
-                        <div className="flex items-center gap-3">
-                            <BarChart className="size-5 text-primary" />
-                            <span>Assessment recommendations</span>
-                        </div>
-                        <ChevronRight className="size-5 text-muted-foreground" />
-                    </Link>
-                     <Link href="#" className="flex items-center justify-between p-3 rounded-md hover:bg-muted">
-                        <div className="flex items-center gap-3">
-                            <RefreshCw className="size-5 text-primary" />
-                            <div>
-                                <p>Retake assessment</p>
-                                <p className="text-xs text-muted-foreground">Last updated: 02/22/2020</p>
+                    {quickAccessItems.map(item => (
+                        <Link href={item.href} key={item.title} className="flex items-center justify-between p-3 rounded-md hover:bg-muted">
+                            <div className="flex items-center gap-3">
+                                {item.icon}
+                                <span>{item.title}</span>
                             </div>
-                        </div>
-                        <ChevronRight className="size-5 text-muted-foreground" />
-                    </Link>
-                    <Link href="#" className="flex items-center justify-between p-3 rounded-md hover:bg-muted">
-                        <div className="flex items-center gap-3">
-                            <FileText className="size-5 text-primary" />
-                            <span>Career review survey</span>
-                        </div>
-                        <ChevronRight className="size-5 text-muted-foreground" />
-                    </Link>
-                    <Link href="#" className="flex items-center justify-between p-3 rounded-md hover:bg-muted">
-                        <div className="flex items-center gap-3">
-                            <FileText className="size-5 text-primary" />
-                            <span>Final report</span>
-                        </div>
-                        <ChevronRight className="size-5 text-muted-foreground" />
-                    </Link>
+                            <ChevronRight className="size-5 text-muted-foreground" />
+                        </Link>
+                    ))}
                 </CardContent>
             </Card>
         </div>
       </main>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {quickAccessItems.map(item => (
-            <Card key={item.title} className="p-4">
-                <div className="flex justify-between items-start">
-                    {item.icon}
-                    <Link href="#"><ChevronRight className="size-5 text-muted-foreground hover:text-foreground" /></Link>
-                </div>
-                <h3 className="font-bold mt-4">{item.title}</h3>
-                <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
-                <div className="flex gap-4 mt-4">
-                    {item.actions.map(action => (
-                         <Button key={action.label} variant="link" size="sm" asChild className="p-0 h-auto text-primary">
-                            <Link href={action.href}>{action.label}</Link>
-                         </Button>
-                    ))}
-                </div>
-            </Card>
-        ))}
-      </div>
     </div>
   );
 }
