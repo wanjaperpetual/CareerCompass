@@ -1,3 +1,4 @@
+
 'use client';
 
 import { redirect } from 'next/navigation';
@@ -15,30 +16,26 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isProfileLoading) {
-      // Check the user role from the profile context.
       const isAdmin = profile.role === 'admin';
       
       if (!isAdmin) {
-        // If not an admin, redirect to the main user dashboard.
         redirect('/dashboard');
       } else {
-        // If admin, authorize access.
         setIsAuthorized(true);
       }
     }
   }, [isProfileLoading, profile.role]);
 
-  // While checking or if not authorized, show a loading/empty state.
   if (isProfileLoading || !isAuthorized) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <p>Checking permissions...</p>
       </div>
     );
   }
 
   return (
-    <div className="light">
+    <div className="admin-theme">
         <SidebarProvider>
             <AppSidebar />
             <SidebarInset>
@@ -56,7 +53,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                 </div>
                 <AdminUserNav />
             </header>
-            <div className="p-4 sm:p-6 lg:p-8 bg-secondary/50 min-h-screen">
+            <div className="p-4 sm:p-6 lg:p-8 bg-muted/30 min-h-[calc(100vh-4rem)]">
                 {children}
             </div>
             </SidebarInset>
