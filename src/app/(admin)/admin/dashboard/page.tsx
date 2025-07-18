@@ -1,4 +1,3 @@
-
 'use client';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow, TableHead, TableHeader } from '@/components/ui/table';
@@ -59,7 +58,7 @@ const chartConfig = {
   },
   users: {
     label: "Users",
-    color: "hsl(var(--chart-2))",
+    color: "hsl(var(--primary))",
   },
 } satisfies ChartConfig;
 
@@ -124,9 +123,9 @@ export default function AdminDashboardPage() {
                 <CardTitle>AI Tool Usage</CardTitle>
                 <CardDescription>Breakdown of queries by feature for the last month.</CardDescription>
             </CardHeader>
-            <CardContent className="h-[300px]">
+            <CardContent className="h-[300px] pl-2">
                  <ChartContainer config={chartConfig} className="w-full h-full">
-                    <BarChart data={toolUsageData} margin={{ top: 20, right: 20, left: -10, bottom: 0 }}>
+                    <BarChart data={toolUsageData} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
                         <XAxis dataKey="tool" tickLine={false} axisLine={false} tickMargin={8} fontSize={12} />
                         <YAxis tickLine={false} axisLine={false} tickMargin={8} fontSize={12} />
                         <RechartsTooltip cursor={false} content={<ChartTooltipContent indicator="dot" />} />
@@ -140,9 +139,9 @@ export default function AdminDashboardPage() {
                 <CardTitle>Daily Active Users</CardTitle>
                 <CardDescription>DAU for the last 7 days.</CardDescription>
             </CardHeader>
-            <CardContent className="h-[300px]">
+            <CardContent className="h-[300px] pl-2">
                  <ChartContainer config={chartConfig} className="w-full h-full">
-                    <LineChart data={dailyActiveUsersData} margin={{ top: 20, right: 20, left: -10, bottom: 0 }}>
+                    <LineChart data={dailyActiveUsersData} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
                         <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} fontSize={12} />
                         <YAxis tickLine={false} axisLine={false} tickMargin={8} fontSize={12} />
                         <RechartsTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />

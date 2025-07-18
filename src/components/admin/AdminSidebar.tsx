@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { Shield, LayoutDashboard, Users, Settings, FileText, Briefcase, GraduationCap } from 'lucide-react';
+import { Shield, LayoutDashboard, Users, Settings, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
