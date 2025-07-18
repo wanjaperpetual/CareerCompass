@@ -11,16 +11,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal } from "lucide-react"
+import { db } from "@/lib/db"
 
-const users = [
-    { id: 'usr_1', name: 'Jane Doe', email: 'jane.doe@email.com', role: 'user', joined: '2023-01-15' },
-    { id: 'usr_2', name: 'John Smith', email: 'john.smith@email.com', role: 'user', joined: '2023-02-20' },
-    { id: 'usr_3', name: 'Alice Johnson', email: 'alice.j@email.com', role: 'user', joined: '2023-03-10' },
-    { id: 'usr_4', name: 'Bob Brown', email: 'b.brown@email.com', role: 'user', joined: '2023-04-05' },
-    { id: 'usr_5', name: 'Charlie Davis', email: 'charlie.d@email.com', role: 'admin', joined: '2023-01-01' },
-]
+export default async function AdminUsersPage() {
+    const users = await db.query.users.findMany();
 
-export default function AdminUsersPage() {
     return (
         <div className="space-y-8">
             <header>
@@ -43,7 +38,6 @@ export default function AdminUsersPage() {
                         <TableHead>Name</TableHead>
                         <TableHead>Email</TableHead>
                         <TableHead>Role</TableHead>
-                        <TableHead>Joined</TableHead>
                         <TableHead>
                         <span className="sr-only">Actions</span>
                         </TableHead>
@@ -59,7 +53,6 @@ export default function AdminUsersPage() {
                                     {user.role}
                                 </Badge>
                             </TableCell>
-                            <TableCell>{user.joined}</TableCell>
                             <TableCell>
                                 <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
