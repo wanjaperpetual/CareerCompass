@@ -2,8 +2,8 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowRight, Bot, ClipboardCheck, University, Briefcase, MessageCircle, History } from 'lucide-react';
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
+import { ArrowRight, Bot, ClipboardCheck, University, Briefcase, MessageCircle, History, PieChart } from 'lucide-react';
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Pie, Sector } from 'recharts';
 import { useProfile } from '@/contexts/ProfileContext';
 import { useHistory, type HistoryItem } from '@/contexts/HistoryContext';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
@@ -44,9 +44,28 @@ export default function DashboardPage() {
       label: "Completeness",
       color: "hsl(var(--primary))",
     },
+    engagement: {
+      label: "Engagement",
+    },
+    completed: {
+      label: "Completed",
+      color: "hsl(var(--primary))",
+    },
+    remaining: {
+      label: "Remaining",
+      color: "hsl(var(--muted))",
+    },
   };
   
   const recentHistory = history.slice(0, 3);
+  
+  const coreTools = ['Coach', 'Skills', 'UniFinder', 'Job Analysis'];
+  const usedTools = new Set(history.map(item => item.tool));
+  const completedCount = Array.from(usedTools).filter(tool => coreTools.includes(tool)).length;
+  const engagementData = [
+    { type: 'completed', value: completedCount, fill: 'var(--color-completed)' },
+    { type: 'remaining', value: coreTools.length - completedCount, fill: 'var(--color-remaining)' },
+  ];
 
   return (
     <div className="flex flex-col gap-8 animate-in fade-in-50">
@@ -84,7 +103,46 @@ export default function DashboardPage() {
         ))}
       </main>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-3">
+         <Card className="lg:col-span-1">
+          <CardHeader>
+            <CardTitle className="font-headline">Feature Engagement</CardTitle>
+            <CardDescription>
+              You've tried {completedCount} out of {coreTools.length} core AI tools.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex items-center justify-center">
+             <ChartContainer
+              config={chartConfig}
+              className="mx-auto aspect-square h-[200px]"
+            >
+              <ResponsiveContainer>
+                <PieChart>
+                  <Tooltip
+                    cursor={false}
+                    content={<ChartTooltipContent hideLabel />}
+                  />
+                  <Pie
+                    data={engagementData}
+                    dataKey="value"
+                    nameKey="type"
+                    innerRadius={60}
+                    strokeWidth={5}
+                  >
+                     <Sector
+                        name="Completed"
+                        fill="var(--color-completed)"
+                      />
+                      <Sector
+                        name="Remaining"
+                        fill="var(--color-remaining)"
+                      />
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            </ChartContainer>
+          </CardContent>
+        </Card>
         <Card>
           <CardHeader>
             <CardTitle className="font-headline">Profile Completeness</CardTitle>
