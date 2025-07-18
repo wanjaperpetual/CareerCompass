@@ -57,7 +57,7 @@ Always end your answers with a helpful follow-up or encouragement like:
     role: msg.role,
     content: [{ text: msg.content }],
   }));
-
+  
   const {text} = await ai.generate({
     model: 'googleai/gemini-2.0-flash',
     system: systemPrompt,
