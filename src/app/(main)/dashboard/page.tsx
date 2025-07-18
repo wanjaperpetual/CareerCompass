@@ -1,31 +1,24 @@
 'use client';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowUpRight, Bot, Briefcase, CheckCircle, Clock, FileText, Target, User } from 'lucide-react';
+import { ArrowRight, Bot, Briefcase, ClipboardCheck, University, History, User } from 'lucide-react';
 import { useProfile } from '@/contexts/ProfileContext';
-import { useHistory } from '@/contexts/HistoryContext';
-import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { Badge } from '@/components/ui/badge';
-import { jobs } from '../jobs/data';
+import { useHistory, HistoryItem } from '@/contexts/HistoryContext';
+import { Progress } from '@/components/ui/progress';
 
-const recentJobs = jobs.slice(0, 5);
+const toolIcons: Record<HistoryItem['tool'], React.ReactNode> = {
+  'Coach': <Bot className="h-5 w-5" />,
+  'Skills': <ClipboardCheck className="h-5 w-5" />,
+  'UniFinder': <University className="h-5 w-5" />,
+  'Job Analysis': <Briefcase className="h-5 w-5" />,
+};
+
 
 export default function DashboardPage() {
   const { profile, isProfileLoading } = useProfile();
   const { history, isLoading: isHistoryLoading } = useHistory();
 
-  const toolUsageData = [
-      { name: 'Jan', count: history.filter(h => new Date(h.timestamp).getMonth() === 0).length },
-      { name: 'Feb', count: history.filter(h => new Date(h.timestamp).getMonth() === 1).length },
-      { name: 'Mar', count: history.filter(h => new Date(h.timestamp).getMonth() === 2).length },
-      { name: 'Apr', count: history.filter(h => new Date(h.timestamp).getMonth() === 3).length },
-      { name: 'May', count: history.filter(h => new Date(h.timestamp).getMonth() === 4).length },
-      { name: 'Jun', count: history.filter(h => new Date(h.timestamp).getMonth() === 5).length },
-      { name: 'Jul', count: history.filter(h => new Date(h.timestamp).getMonth() === 6).length },
-      { name: 'Aug', count: history.filter(h => new Date(h.timestamp).getMonth() === 7).length },
-    ];
-  
   const profileCompleteness = Math.round(
       (Object.values(profile).filter(value => {
         if (typeof value === 'string') return value.trim() !== '';
@@ -34,27 +27,7 @@ export default function DashboardPage() {
       }).length / Object.keys(profile).length) * 100
   );
 
-  const StatCard = ({ icon, title, value, change, isPrimary = false }: { icon: React.ReactNode, title: string, value: string, change: string, isPrimary?: boolean }) => (
-    <Card className={isPrimary ? 'bg-primary text-primary-foreground' : ''}>
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <div className={`p-2 rounded-full ${isPrimary ? 'bg-primary-foreground/20' : 'bg-primary/10'}`}>
-            {icon}
-          </div>
-          <p className={`text-sm ${isPrimary ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>{title}</p>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <h3 className="text-3xl font-bold">{value}</h3>
-        <div className="flex items-center text-sm mt-2">
-          <span className={`px-2 py-0.5 rounded-full text-xs flex items-center gap-1 ${isPrimary ? 'bg-white/20' : 'bg-green-100 text-green-800'}`}>
-            <ArrowUpRight className="h-3 w-3" /> {change}
-          </span>
-          <span className={`ml-2 ${isPrimary ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>vs last month</span>
-        </div>
-      </CardContent>
-    </Card>
-  );
+  const recentHistory = history.slice(0, 3);
   
   return (
     <div className="flex flex-col gap-8">
@@ -63,84 +36,132 @@ export default function DashboardPage() {
           Hello, {isProfileLoading ? '...' : profile.name.split(' ')[0]}!
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">
-          Welcome back to your career dashboard.
+          Welcome back to your CareerCompass. Let's find your path.
         </p>
       </header>
       
       <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard icon={<User className="text-primary"/>} title="Profile Completeness" value={`${profileCompleteness}%`} change="+5%" isPrimary />
-            <StatCard icon={<FileText className="text-primary"/>} title="Jobs Applied" value="12" change="+2" />
-            <StatCard icon={<Bot className="text-primary"/>} title="AI Queries" value={isHistoryLoading ? '...' : `${history.length}`} change="+10" />
-            <StatCard icon={<Briefcase className="text-primary"/>} title="Saved Jobs" value="5" change="+1" />
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="font-headline">AI Tool Usage History</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <div className="h-80">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RechartsBarChart data={toolUsageData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                      <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
-                      <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
-                      <Tooltip
-                          contentStyle={{
-                              backgroundColor: 'hsl(var(--background))',
-                              borderColor: 'hsl(var(--border))',
-                              borderRadius: 'var(--radius)',
-                          }}
-                          cursor={{fill: 'hsl(var(--muted))'}}
-                      />
-                      <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="count" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} className="fill-sky-300" />
-                    </RechartsBarChart>
-                  </ResponsiveContainer>
-                </div>
-            </CardContent>
-          </Card>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-base font-medium flex items-center justify-between">
+                            <span>AI Queries</span>
+                            <Bot className="h-5 w-5 text-muted-foreground" />
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-3xl font-bold">{isHistoryLoading ? '...' : history.length}</p>
+                        <p className="text-xs text-muted-foreground">Total interactions</p>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle className="text-base font-medium flex items-center justify-between">
+                            <span>Saved Jobs</span>
+                             <Briefcase className="h-5 w-5 text-muted-foreground" />
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-3xl font-bold">5</p>
+                        <p className="text-xs text-muted-foreground">Ready to apply</p>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle className="text-base font-medium flex items-center justify-between">
+                            <span>Profile Strength</span>
+                            <User className="h-5 w-5 text-muted-foreground" />
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-3xl font-bold">{profileCompleteness}%</p>
+                        <Progress value={profileCompleteness} className="h-2 mt-2" />
+                    </CardContent>
+                </Card>
+            </div>
+          
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                    <div>
+                        <CardTitle className="font-headline">Recent Activity</CardTitle>
+                        <CardDescription>Your recent interactions with AI tools.</CardDescription>
+                    </div>
+                    <Button variant="ghost" asChild>
+                        <Link href="/history">View all <ArrowRight className="ml-2 size-4" /></Link>
+                    </Button>
+                </CardHeader>
+                <CardContent>
+                    {isHistoryLoading ? (
+                        <p>Loading history...</p>
+                    ) : recentHistory.length > 0 ? (
+                        <div className="space-y-4">
+                        {recentHistory.map(item => (
+                            <div key={item.id} className="flex items-center gap-4">
+                                <div className="p-2 bg-primary/10 rounded-md text-primary">
+                                    {toolIcons[item.tool]}
+                                </div>
+                                <div>
+                                    <p className="font-semibold">{item.tool}</p>
+                                    <p className="text-xs text-muted-foreground">{new Date(item.timestamp).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                        ))}
+                        </div>
+                    ) : (
+                        <p className="text-sm text-muted-foreground">No recent activity. Try using one of the tools!</p>
+                    )}
+                </CardContent>
+            </Card>
         </div>
 
         {/* Right Column */}
         <div className="space-y-6">
-           <Card className="bg-gradient-to-br from-purple-600 to-blue-800 text-white overflow-hidden">
+            <Card className="bg-primary text-primary-foreground">
                 <CardHeader>
-                    <CardTitle className="font-headline text-2xl">Your Career, Backed by Data</CardTitle>
+                    <CardTitle className="font-headline text-2xl">AI Career Coach</CardTitle>
+                    <CardDescription className="text-primary-foreground/80">Get personalized career advice based on your profile.</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <div className="relative">
-                        <Bot className="absolute -bottom-8 -right-4 h-32 w-32 text-white/10" />
-                        <p className="text-sm text-purple-200 relative z-10">AI analyzes industry trends, hiring patterns, and skill gaps to give you personalized career advice.</p>
-                        <Button variant="secondary" className="mt-4" asChild>
-                            <Link href="/coach">Generate Now</Link>
-                        </Button>
-                    </div>
-                </CardContent>
+                <CardFooter>
+                    <Button variant="secondary" className="w-full" asChild>
+                        <Link href="/coach">Start a Session</Link>
+                    </Button>
+                </CardFooter>
             </Card>
-
             <Card>
                 <CardHeader>
-                    <CardTitle className="font-headline">Open Positions</CardTitle>
-                    <CardDescription>A preview of the latest job opportunities.</CardDescription>
+                    <CardTitle className="font-headline">Find Opportunities</CardTitle>
+                     <CardDescription>Browse jobs or find the right university.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    {recentJobs.map(job => (
-                        <div key={job.id} className="flex items-center justify-between">
-                            <div>
-                                <p className="font-semibold">{job.title}</p>
-                                <p className="text-sm text-muted-foreground">{job.company}</p>
-                            </div>
-                            <Badge variant={job.type === 'Full-time' ? 'default' : 'secondary'} className="capitalize">{job.type}</Badge>
-                        </div>
-                    ))}
+                    <Button variant="outline" className="w-full" asChild>
+                        <Link href="/jobs">
+                            <Briefcase className="mr-2" />
+                            Job Board
+                        </Link>
+                    </Button>
                      <Button variant="outline" className="w-full" asChild>
-                        <Link href="/jobs">View All Jobs</Link>
+                        <Link href="/unifinder">
+                            <University className="mr-2" />
+                            UniFinder Kenya
+                        </Link>
                     </Button>
                 </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="font-headline">Develop Your Skills</CardTitle>
+                    <CardDescription>Get a personalized plan to improve your skills.</CardDescription>
+                </CardHeader>
+                <CardFooter>
+                     <Button variant="outline" className="w-full" asChild>
+                        <Link href="/skills">
+                           <ClipboardCheck className="mr-2" />
+                           Assess My Skills
+                        </Link>
+                    </Button>
+                </CardFooter>
             </Card>
         </div>
       </main>
