@@ -13,11 +13,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { MoreHorizontal } from "lucide-react"
 
 const users = [
-    { id: 'usr_1', name: 'Jane Doe', email: 'jane.doe@email.com', role: 'User', joined: '2023-01-15' },
-    { id: 'usr_2', name: 'John Smith', email: 'john.smith@email.com', role: 'User', joined: '2023-02-20' },
-    { id: 'usr_3', name: 'Alice Johnson', email: 'alice.j@email.com', role: 'User', joined: '2023-03-10' },
-    { id: 'usr_4', name: 'Bob Brown', email: 'b.brown@email.com', role: 'User', joined: '2023-04-05' },
-    { id: 'usr_5', name: 'Charlie Davis', email: 'charlie.d@email.com', role: 'Admin', joined: '2023-01-01' },
+    { id: 'usr_1', name: 'Jane Doe', email: 'jane.doe@email.com', role: 'user', joined: '2023-01-15' },
+    { id: 'usr_2', name: 'John Smith', email: 'john.smith@email.com', role: 'user', joined: '2023-02-20' },
+    { id: 'usr_3', name: 'Alice Johnson', email: 'alice.j@email.com', role: 'user', joined: '2023-03-10' },
+    { id: 'usr_4', name: 'Bob Brown', email: 'b.brown@email.com', role: 'user', joined: '2023-04-05' },
+    { id: 'usr_5', name: 'Charlie Davis', email: 'charlie.d@email.com', role: 'admin', joined: '2023-01-01' },
 ]
 
 export default function AdminUsersPage() {
@@ -55,7 +55,7 @@ export default function AdminUsersPage() {
                             <TableCell className="font-medium">{user.name}</TableCell>
                             <TableCell>{user.email}</TableCell>
                             <TableCell>
-                                <Badge variant={user.role === 'Admin' ? 'default' : 'secondary'}>
+                                <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
                                     {user.role}
                                 </Badge>
                             </TableCell>
