@@ -54,7 +54,7 @@ Always end your answers with a helpful follow-up or encouragement like:
 “Keep exploring—you're doing great!”`;
 
   const conversationHistory = input.history.map(msg => ({
-    role: msg.role as 'user' | 'model',
+    role: msg.role,
     content: [{ text: msg.content }],
   }));
 
