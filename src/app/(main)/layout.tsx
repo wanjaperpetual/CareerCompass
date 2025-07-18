@@ -13,7 +13,7 @@ export default function MainLayout({
   const isSignedIn = true; // Replace with actual auth check
 
   if (!isSignedIn) {
-    redirect('/sign-in');
+    redirect('/role-selector');
   }
 
   return (
