@@ -1,11 +1,11 @@
 
 'use client';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Bot, Briefcase, Users, BarChart, FileText, ArrowUp, ArrowDown } from 'lucide-react';
+import { Bot, Briefcase, Users, FileText, ArrowUp, ArrowDown, GraduationCap, ClipboardCheck } from 'lucide-react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart";
-import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip as RechartsTooltip, CartesianGrid } from 'recharts';
+import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip as RechartsTooltip } from 'recharts';
 import { Button } from '@/components/ui/button';
 
 const recentActivity = [
@@ -17,20 +17,37 @@ const recentActivity = [
   { id: 6, user: 'Frank', action: 'Generated career advice for "Law"', tool: 'Coach', time: '3h ago' },
 ];
 
-const queriesByDayData = [
-  { date: 'Mon', queries: 220 },
-  { date: 'Tue', queries: 180 },
-  { date: 'Wed', queries: 250 },
-  { date: 'Thu', queries: 210 },
-  { date: 'Fri', queries: 300 },
-  { date: 'Sat', queries: 280 },
-  { date: 'Sun', queries: 350 },
+const toolUsageData = [
+    { tool: 'Coach', queries: 150, fill: "var(--color-coach)" },
+    { tool: 'Job Analysis', queries: 120, fill: "var(--color-job-analysis)" },
+    { tool: 'UniFinder', queries: 90, fill: "var(--color-unifinder)" },
+    { tool: 'Skills', queries: 75, fill: "var(--color-skills)" },
+    { tool: 'Chat', queries: 138, fill: "var(--color-chat)" },
 ];
 
 const chartConfig = {
   queries: {
     label: "Queries",
+  },
+  coach: {
+    label: "Coach",
     color: "hsl(var(--chart-1))",
+  },
+  'job-analysis': {
+    label: "Job Analysis",
+    color: "hsl(var(--chart-2))",
+  },
+  unifinder: {
+    label: "UniFinder",
+    color: "hsl(var(--chart-3))",
+  },
+  skills: {
+    label: "Skills",
+    color: "hsl(var(--chart-4))",
+  },
+    chat: {
+    label: "Chat",
+    color: "hsl(var(--chart-5))",
   },
 } satisfies ChartConfig;
 
@@ -41,16 +58,13 @@ export default function AdminDashboardPage() {
       <header className="flex justify-between items-center">
         <div>
             <h1 className="text-3xl font-bold font-headline tracking-tight">
-            Hello Admin!
+            Admin Dashboard
             </h1>
             <p className="text-lg text-muted-foreground">
-            Displaying data for the last 7 days.
+            Overview of system usage and user engagement.
             </p>
         </div>
-        <div className="flex items-center gap-4">
-            <Button variant="outline">Export Data</Button>
-            <Button className="bg-green-500 hover:bg-green-600 text-white">See AI Actions</Button>
-        </div>
+        <Button variant="outline">Export Data</Button>
       </header>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -69,19 +83,6 @@ export default function AdminDashboardPage() {
         </Card>
         <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Jobs Listed</CardTitle>
-            <Briefcase className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">84</div>
-             <p className="text-xs text-muted-foreground flex items-center gap-1">
-                <ArrowUp className="h-3 w-3 text-green-500"/>
-                <span>+12 since last week</span>
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="bg-card/50 backdrop-blur-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">AI Queries Today</CardTitle>
             <Bot className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -93,14 +94,27 @@ export default function AdminDashboardPage() {
             </p>
           </CardContent>
         </Card>
-         <Card className="bg-green-500/10 border-green-500/50">
+        <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">AI Recommendations</CardTitle>
+            <CardTitle className="text-sm font-medium">Career Advice Generated</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">8 Actions</div>
-            <p className="text-xs text-green-400">Recommended based on new user signups.</p>
+            <div className="text-2xl font-bold">342</div>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+                <ArrowUp className="h-3 w-3 text-green-500"/>
+                <span>+15% from last week</span>
+            </p>
+          </CardContent>
+        </Card>
+         <Card className="bg-card/50 backdrop-blur-sm">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">University Searches</CardTitle>
+            <GraduationCap className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">1,890</div>
+            <p className="text-xs text-muted-foreground">Total searches all time</p>
           </CardContent>
         </Card>
       </div>
@@ -108,24 +122,17 @@ export default function AdminDashboardPage() {
       <div className="grid gap-6 md:grid-cols-5">
         <Card className="md:col-span-3 bg-card/50 backdrop-blur-sm">
             <CardHeader>
-                <CardTitle>AI Query Analytics</CardTitle>
-                <CardDescription>Total queries over the last 7 days.</CardDescription>
+                <CardTitle>AI Tool Usage</CardTitle>
+                <CardDescription>Breakdown of queries by feature for the last 7 days.</CardDescription>
             </CardHeader>
             <CardContent className="h-[250px]">
                  <ChartContainer config={chartConfig} className="w-full h-full">
-                    <AreaChart data={queriesByDayData} margin={{ top: 5, right: 20, left: -10, bottom: 0 }}>
-                        <defs>
-                            <linearGradient id="colorQueries" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="hsl(var(--chart-1))" stopOpacity={0.8}/>
-                            <stop offset="95%" stopColor="hsl(var(--chart-1))" stopOpacity={0.1}/>
-                            </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border)/0.5)"/>
-                        <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} />
+                    <BarChart data={toolUsageData} margin={{ top: 20, right: 20, left: -10, bottom: 0 }}>
+                        <XAxis dataKey="tool" tickLine={false} axisLine={false} tickMargin={8} />
                         <YAxis tickLine={false} axisLine={false} tickMargin={8} />
                         <RechartsTooltip cursor={true} content={<ChartTooltipContent indicator="dot" />} />
-                        <Area type="monotone" dataKey="queries" stroke="hsl(var(--chart-1))" fillOpacity={1} fill="url(#colorQueries)" />
-                    </AreaChart>
+                        <Bar dataKey="queries" radius={4} />
+                    </BarChart>
                 </ChartContainer>
             </CardContent>
         </Card>
@@ -154,3 +161,5 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+
+    
