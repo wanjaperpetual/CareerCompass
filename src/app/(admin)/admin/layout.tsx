@@ -6,6 +6,8 @@ import { AdminUserNav } from '@/components/admin/AdminUserNav';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { useProfile, ProfileProvider } from '@/contexts/ProfileContext';
 import { useEffect, useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const { profile, isProfileLoading } = useProfile();
@@ -23,25 +25,30 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     }
   }, [isProfileLoading, profile.role]);
 
-  if (!isAuthorized) {
+  if (isProfileLoading || !isAuthorized) {
     return null; 
   }
 
   return (
-    <div className="dark">
+    <div className="light">
         <SidebarProvider>
             <AppSidebar />
             <SidebarInset>
-            <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border/20 bg-background/80 px-4 backdrop-blur sm:px-6 lg:px-8">
-                <div className="md:hidden">
-                    <SidebarTrigger />
-                </div>
-                <div className="hidden md:block">
-                    {/* Placeholder for breadcrumbs or page title */}
+            <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-4 sm:px-6 lg:px-8">
+                <div className="flex items-center gap-4">
+                    <SidebarTrigger className="md:hidden" />
+                    <div className="relative hidden md:block">
+                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            type="search"
+                            placeholder="Search..."
+                            className="w-full rounded-lg bg-secondary pl-8 md:w-[200px] lg:w-[336px]"
+                        />
+                    </div>
                 </div>
                 <AdminUserNav />
             </header>
-            <div className="p-4 sm:p-6 lg:p-8 bg-background">
+            <div className="p-4 sm:p-6 lg:p-8 bg-secondary/50 min-h-screen">
                 {children}
             </div>
             </SidebarInset>

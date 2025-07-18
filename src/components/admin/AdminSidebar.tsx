@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { Shield, LayoutDashboard, Users, Settings, LogOut, FileText } from 'lucide-react';
+import { Shield, LayoutDashboard, Users, Settings, LogOut, FileText, Briefcase, GraduationCap } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -23,15 +23,17 @@ export function AppSidebar() {
   const menuItems = [
     { href: '/admin/dashboard', icon: <LayoutDashboard />, label: 'Dashboard' },
     { href: '/admin/users', icon: <Users />, label: 'User Management' },
-    { href: '/admin/content', icon: <FileText />, label: 'Content Management' },
+    { href: '/admin/content', icon: <FileText />, label: 'Content' },
+    { href: '/admin/jobs', icon: <Briefcase />, label: 'Jobs' },
+    { href: '/admin/universities', icon: <GraduationCap />, label: 'Universities' },
   ];
 
   return (
-    <Sidebar>
+    <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader>
         <Link href="/admin/dashboard" className="flex items-center gap-2.5">
           <Shield className="size-8 text-primary" />
-          <h1 className="text-xl font-bold font-headline text-sidebar-foreground">Admin Portal</h1>
+          <h1 className="text-xl font-bold font-headline text-sidebar-foreground">Admin</h1>
         </Link>
       </SidebarHeader>
       <SidebarContent>
